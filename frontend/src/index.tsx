@@ -7,5 +7,3 @@ ReactDOM.render((
 <App/>  
 ), 
 document.getElementById('root'));
-
-// ReactDOM.render((<div>I can change this! :)</div>), document.getElementById('root'));
