@@ -6,6 +6,6 @@ interface AppProps {
 
 export default function App(props : AppProps){
     return(
-        <div> Hello New World!!!!! </div>
+        <div> <a href="/a"> Hello New World!!!!! </a> </div>
     );
 }
