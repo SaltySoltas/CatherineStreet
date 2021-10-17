@@ -8,7 +8,6 @@ class mysql_db {
     connection: mysql.Connection;
 
     public constructor(){
-        console.log("Initializing db...");
         this.connection = mysql.createConnection({
             host: process.env.MYSQL_HOST,
             user: process.env.MYSQL_USER,
@@ -18,6 +17,17 @@ class mysql_db {
         this.connection.connect(err => {
             if(err) throw err;
         });
+    }
+
+    // For querying the db within a promise, handles rejecting with errors automatically
+    public pquery(query: string, reject: any, cb: any){
+        this.connection.query(query, (err, result) => {
+            if(err){
+                reject(err);
+            }else{
+                cb(result);
+            }
+        })
     }
 }
 

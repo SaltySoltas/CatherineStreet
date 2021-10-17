@@ -23,10 +23,10 @@ CREATE TABLE IF NOT EXISTS `websites` (
 CREATE TABLE IF NOT EXISTS `comments` (
     comment_id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
     comment_text varchar(300) NOT NULL,
-    created_at datetime NOT NULL,
+    created_at datetime DEFAULT now(),
     user_id bigint(20) unsigned NOT NULL,
     website_id bigint(20) unsigned NOT NULL,
-    score bigint(20) unsigned NOT NULL,
+    score bigint(20) unsigned NOT NULL DEFAULT 0,
     PRIMARY KEY (comment_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (website_id) REFERENCES websites(website_id),
