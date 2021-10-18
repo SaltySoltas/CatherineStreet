@@ -6,7 +6,7 @@ import util_sql from '../sql/util_sql';
     // Optionally reuse existing db connection as parameter
     // Useful for internal calls
     // Get website id from websites table, or create new record and return new id if not found
-    function get_website_id(url: string, db = new mysql_db()): Promise<string> {
+    function get_website_id(url: string, db = new mysql_db()): Promise<number> {
         return new Promise((resolve, reject) => {
             db.pquery(util_sql.get_website_by_url(url), reject, (result: any) => {
                 if(result.length === 0){
@@ -23,7 +23,7 @@ import util_sql from '../sql/util_sql';
     }
 
 
-    function post_comment(user_id: string, url: string, text: string){
+    function post_comment(user_id: number, url: string, text: string){
         let db = new mysql_db();
         return new Promise((resolve, reject) => {
             get_website_id(url, db)
@@ -38,7 +38,23 @@ import util_sql from '../sql/util_sql';
         });
     }
 
+    function get_comments(url: string, start: number, limit: number){
+        let db = new mysql_db();
+        return new Promise((resolve, reject) => {
+            get_website_id(url, db)
+            .then(site_id => {
+                db.pquery(comments_sql.get_comments(site_id, start, limit), reject, (result:any) => {
+                    resolve(result);
+                });
+            })
+            .catch(err => {
+                reject(err);
+            })
+        })
+    }
+
 export default{
     get_website_id,
-    post_comment
+    post_comment,
+    get_comments
 }

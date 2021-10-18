@@ -6,7 +6,7 @@ export default {
         return `INSERT INTO \`users\` (first_name, last_name) VALUES (${mysql.escape(first_name)}, ${mysql.escape(last_name)});`;
     },
 
-    get_user_by_id (id: string) {
+    get_user_by_id (id: number) {
         return `SELECT * FROM \`users\` WHERE user_id=${mysql.escape(id)}`
     }
 };

@@ -2,7 +2,7 @@ import mysql_db from '../services/mysql_db';
 import users_sql from '../sql/users_sql';
 import util_sql from '../sql/util_sql';
 
-    function get_user_by_id (id: string) {
+    function get_user_by_id (id: number) {
         return new Promise((resolve, reject) => {
             let db = new mysql_db();
             let query = users_sql.get_user_by_id(id);

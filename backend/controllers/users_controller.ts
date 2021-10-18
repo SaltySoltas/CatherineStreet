@@ -3,14 +3,20 @@ import users_service from '../services/users_service';
 
 
 export default {
-    get_user_by_id (req: express.Request, res: express.Response, next: express.NextFunction) {
+    get_user_by_id (req: express.Request, res: express.Response) {
         let id = req.params.id;
-        if(!id || !/^\d+$/.test(id)){
-            res.status(400).send("Invalid user id");
+        if(!id){
+            res.status(400).send("Missing user id");
             return;
         }
 
-        users_service.get_user_by_id(id)
+        let id_int = parseInt(id);
+        if(isNaN(id_int)){
+            res.status(400).send("Could not parse int");
+            return;
+        }
+
+        users_service.get_user_by_id(id_int)
         .then(user => {
             res.status(200).send(user);
         })
@@ -19,7 +25,7 @@ export default {
         });
     },
 
-    create_new_user (req: express.Request, res: express.Response, next: express.NextFunction) {
+    create_new_user (req: express.Request, res: express.Response) {
         let {first_name, last_name} = req.body;
         if(!first_name || !last_name){
             res.status(400).send("Invalid first or last name");
