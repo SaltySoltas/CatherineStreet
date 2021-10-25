@@ -1,8 +1,9 @@
 # Catherine Street
 
-## Getting started
-1. Run server with ```yarn run start```
-2. Start mysql with ```brew services start mysql```
+## Getting started locally
+1. Fill out fields in .env_template and rename the updated file to .env
+2. Run server with ```yarn run start```
+3. Start mysql with ```brew services start mysql```
     - If mysql is not yet installed: 
     ```brew install mysql```
     - Start mysql with ```mysql -u root``` and run ```ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '<NEW PASSWORD>'```
