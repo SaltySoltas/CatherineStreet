@@ -17,10 +17,10 @@ class mysql_db {
     }
 
     // For querying the db within a promise, handles rejecting with errors automatically
-    public pquery(query: string, reject: any, cb: any){
+    public pquery(query: string, fail_cb: any, cb: any){
         this.connection.query(query, (err, result) => {
             if(err){
-                reject(err);
+                fail_cb(err);
             }else{
                 cb(result);
             }

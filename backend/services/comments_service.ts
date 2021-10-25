@@ -22,7 +22,6 @@ import util_sql from '../sql/util_sql';
         });
     }
 
-
     function post_comment(user_id: number, url: string, text: string){
         let db = new mysql_db();
         return new Promise((resolve, reject) => {
