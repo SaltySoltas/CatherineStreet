@@ -3,10 +3,10 @@ import { JsonObjectExpression } from 'typescript';
 
 interface Props {
     username: String,
-    sitehash: String
+    siteurl: String
 };
 
-export const CommentInput: React.FC<Props> = ({username, sitehash}) => {
+export const CommentInput: React.FC<Props> = ({username, siteurl}) => {
 
     const [content, setContent] = useState('');
 
@@ -19,13 +19,13 @@ export const CommentInput: React.FC<Props> = ({username, sitehash}) => {
         console.log(content);
         return {
             method: 'POST',
-            headers: {'Content-Type':'Application/json'},
-            body: JSON.stringify({'username':username,'sitehash':sitehash,'content':content})
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({'user_id':1,'url':siteurl,'text':content})
         };
     }
 
     const onSubmit = () => {
-        fetch("http://localhost:8080/comments/", requestOptions())
+        fetch("http://localhost:8080/api/comments/", requestOptions())
         return;
     }
 
