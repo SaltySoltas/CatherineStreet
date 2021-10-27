@@ -1,5 +1,5 @@
 import React from 'react';
-import { CommentInput } from './CommentInput';
+import { CommentInput } from './components/CommentInput';
 
 interface AppProps {
     
