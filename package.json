@@ -5,6 +5,8 @@
   "author": "cullend <cullend@umich.edu>",
   "license": "MIT",
   "dependencies": {
+    "@emotion/react": "^11.5.0",
+    "@emotion/styled": "^11.3.0",
     "@mui/material": "^5.0.6",
     "@types/express": "^4.17.13",
     "@types/mysql": "^2.15.19",
