@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const FileManagerPlugin = require('filemanager-webpack-plugin')
 
 module.exports = {
     entry: "./src",
@@ -22,5 +23,17 @@ module.exports = {
       new HtmlWebpackPlugin({
         template: path.join(__dirname, "src", "index.html"),
       }),
+      new FileManagerPlugin({
+        events: {
+          onEnd: [{
+              copy: [
+                  {
+                      source: path.join(__dirname, 'dist'),
+                      destination: path.join(__dirname, '../extensions/chrome/dist')
+                  }
+              ]
+          }]
+        }
+    })
     ],
 };

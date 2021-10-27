@@ -1,0 +1,13 @@
+{
+    "name": "Catherine Street",
+    "description": "A browser extension that enaables discussion on any webpage.",
+    "version": "1.0",
+    "manifest_version": 3,
+    "permissions": [
+      "identity"
+    ],
+    "action": {
+      "default_title": "Catherine Street",
+      "default_popup": "dist/index.html"
+    }
+  }
