@@ -6,6 +6,10 @@ DROP TABLE IF EXISTS `comments`;
 DROP TABLE IF EXISTS `users`;
 \! echo "Done"
 
-\! Echo "Dropping webistes..."
+\! echo "Dropping webistes..."
 DROP TABLE IF EXISTS `websites`;
-\! Echo "Done"
+\! echo "Done"
+
+\! echo "Dropping reactions..."
+DROP TABLE IF EXISTS `reactions`;
+\! echo "Done"

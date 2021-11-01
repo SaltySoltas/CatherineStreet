@@ -12,7 +12,9 @@ class mysql_db {
             database: process.env.MYSQL_DB
         });
         this.connection.connect(err => {
-            if(err) throw err;
+            if(err) {
+                console.error(err);
+            }
         });
     }
 

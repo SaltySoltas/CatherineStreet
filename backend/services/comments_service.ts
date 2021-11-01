@@ -52,8 +52,19 @@ import util_sql from '../sql/util_sql';
         })
     }
 
+    function add_comment_reaction(comment_id: number, reaction_id: number, user_id: number) {
+        let db = new mysql_db();
+        return new Promise((resolve, reject) => {
+            db.pquery(comments_sql.add_comment_reaction(comment_id, reaction_id, user_id), reject, (result: any) => {
+                resolve(result)
+            });
+        });
+    }
+
+
 export default{
     get_website_id,
     post_comment,
-    get_comments
+    get_comments,
+    add_comment_reaction
 }

@@ -12,4 +12,6 @@ comments_router.get('/:url/:start/:limit', comments_controller.get_comments);
 
 comments_router.post('/', comments_controller.post_comment);
 
+comments_router.put('/:comment_id/reaction/:reaction_id/:user_id', comments_controller.add_comment_reaction);
+
 export default comments_router;
