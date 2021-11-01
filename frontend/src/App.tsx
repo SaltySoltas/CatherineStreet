@@ -5,9 +5,9 @@ import { MainContainer } from "./components/MainContainer";
 interface AppProps {}
 
 export default function App(props: AppProps) {
+  console.log("APP REFRESH");
   return (
     <div>
-      <a href="/a"> Hello New World!! </a>
       <MainContainer site_url="google.com" username="wsoltas" />
     </div>
   );

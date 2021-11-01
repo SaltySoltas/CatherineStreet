@@ -32,11 +32,11 @@ export function SortBar({cur_sort_type, set_sort_type} : SortBarProps) : JSX.Ele
     return (
         <div id="SortBar">
             <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Age</InputLabel>
+            <InputLabel id="sort-selector-label">Sort By</InputLabel>
             <Select
-                id="demo-simple-select"
+                id="sort-selector"
                 value={cur_sort_type}
-                label="Sort Type"
+                label="Sort By"
                 onChange={sortTypeOnChange}
             >s
                 <MenuItem value={SortType.Chronological}>Chronological</MenuItem>
