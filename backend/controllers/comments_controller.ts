@@ -86,6 +86,37 @@ export default {
         .catch(err => {
             res.status(400).send(err);
         });
+    },
+
+    remove_comment_reaction (req: express.Request, res: express.Response) {
+        let {comment_id, reaction_id, user_id} = util.parse_path_ints(req);
+
+        util.api_precondition_is_defined(comment_id, "comment_id is undefined");
+        util.api_precondition_is_defined(reaction_id, "reaction_id is undefined");
+        util.api_precondition_is_defined(user_id, "user_id is undefined");
+
+
+        comments_service.remove_comment_reaction(comment_id, reaction_id, user_id)
+        .then(result => {
+            res.status(200).send(result);
+        })
+        .catch(err => {
+            res.status(400).send(err);
+        });
+    },
+
+    get_comment_reactions (req: express.Request, res: express.Response) {
+        let {comment_id} = util.parse_path_ints(req);
+
+        util.api_precondition_is_defined(comment_id, "comment_id is undefined");
+
+        comments_service.get_comment_reactions(comment_id)
+        .then(result => {
+            res.status(200).send(result);
+        })
+        .catch(err => {
+            res.status(400).send(err);
+        })
     }
 
 }
