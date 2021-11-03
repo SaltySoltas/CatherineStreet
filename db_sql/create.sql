@@ -33,4 +33,13 @@ CREATE TABLE IF NOT EXISTS `comments` (
     INDEX (website_id),
     INDEX (user_id)
 );
+
+\! echo "Creating sessions table..."
+CREATE TABLE IF NOT EXISTS `sessions` (
+    session_id varchar (300),
+    user_id bigint(20) unsigned NOT NULL,
+    PRIMARY KEY (user_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    INDEX (user_id)
+)
 \! echo "Done"

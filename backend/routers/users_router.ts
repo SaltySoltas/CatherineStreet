@@ -15,5 +15,7 @@ users_router.get('/:id', users_controller.get_user_by_id);
 // Create new user, respond with new user id
 users_router.post('/create', users_controller.create_new_user);
 
+users_router.post('/auth', users_controller.auth)
+
 // module.exports = users_router;
 export default users_router;

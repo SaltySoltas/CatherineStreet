@@ -1,8 +1,11 @@
 import express from 'express';
+import session, { SessionData } from 'express-session';
 import users_service from '../services/users_service';
 
-
 export default {
+
+    
+
     get_user_by_id (req: express.Request, res: express.Response) {
         let id = req.params.id;
         if(!id){
@@ -39,5 +42,13 @@ export default {
         .catch(err => {
             res.status(400).send(err);
         });
+    },
+
+    auth (req: express.Request, res: express.Response) {
+        //go through auth
+
+        //return session if successful
+        var session = req.session;
+        res.status(200).send();
     }
 }

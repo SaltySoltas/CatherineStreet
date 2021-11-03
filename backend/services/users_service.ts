@@ -23,6 +23,26 @@ import util_sql from '../sql/util_sql';
         });
     }
 
+    function create_or_update_session(user_id: number, session_token: string) {
+        return new Promise((resolve, reject) => {
+            let db = new mysql_db();
+            let query = users_sql.create_session(user_id, session_token);
+            db.pquery(query, reject, (result: any) => {
+                    resolve(result);
+            });
+        });
+    }
+
+    function validate_session(user_id:number, session_token: string) {
+        return new Promise((resolve, reject) => {
+            let db = new mysql_db();
+            let query = users_sql.validate_session(session_token);
+            db.pquery(query, reject, (result: any) => {
+                resolve(result["user_id"] == user_id);
+            });
+        });
+    }
+
 export default {
     get_user_by_id,
     create_new_user

@@ -8,5 +8,13 @@ export default {
 
     get_user_by_id (id: number) {
         return `SELECT * FROM \`users\` WHERE user_id=${mysql.escape(id)}`
+    },
+
+    create_session(uid: number, token: string) {
+        return `INSERT INTO \`session\` (user_id, session_id) VALUES (${mysql.escape(uid)}, ${mysql.escape(token)})`
+    },
+
+    validate_session(token: string){
+        return `SELECT user_id FROM \`sessions\` WHERE session_id=${mysql.escape(token)}`
     }
 };
