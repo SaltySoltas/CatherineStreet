@@ -20,10 +20,6 @@ function is_valid_url(url: string | undefined): boolean {
 export default {
     get_site_id_test (req: express.Request, res: express.Response) {
         let {url} = req.params;
-        // if(!url || !is_valid_url(url)){
-        //     res.status(400).send("Invalid url");
-        //     return;
-        // }
 
         util.api_precondition(is_valid_url(url), "Invalid url passed");
 
@@ -41,7 +37,7 @@ export default {
         let {user_id, url, text} = req.body;
 
 
-        util.api_precondition(user_id !== undefined, "Could not parse user_id int");
+        util.api_precondition_is_defined(user_id, "user_id is a required field");
         util.api_precondition(is_valid_url(url), "Invalid url passed");
         util.api_precondition(!!text, "Invalid comment text");
 
@@ -59,8 +55,8 @@ export default {
         let {start, limit} = util.parse_path_ints(req);
 
         util.api_precondition(is_valid_url(url), "Invalid url passed");
-        util.api_precondition_is_defined(start, "start is undefined");
-        util.api_precondition_is_defined(limit, "limit is undefined");
+        util.api_precondition_is_defined(start, "Could not parse start int");
+        util.api_precondition_is_defined(limit, "Could not parse limit int");
 
         comments_service.get_comments(url, start, limit)
         .then(result => {
@@ -74,9 +70,9 @@ export default {
     add_comment_reaction (req: express.Request, res: express.Response) {
         let {comment_id, reaction_id, user_id} = util.parse_path_ints(req);
 
-        util.api_precondition_is_defined(comment_id, "comment_id is undefined");
-        util.api_precondition_is_defined(reaction_id, "reaction_id is undefined");
-        util.api_precondition_is_defined(user_id, "user_id is undefined");
+        util.api_precondition_is_defined(comment_id, "Could not parse comment_id int");
+        util.api_precondition_is_defined(reaction_id, "Could not parse reaction_id int");
+        util.api_precondition_is_defined(user_id, "Could not parse user_id int");
 
 
         comments_service.add_comment_reaction(comment_id, reaction_id, user_id)
@@ -91,9 +87,9 @@ export default {
     remove_comment_reaction (req: express.Request, res: express.Response) {
         let {comment_id, reaction_id, user_id} = util.parse_path_ints(req);
 
-        util.api_precondition_is_defined(comment_id, "comment_id is undefined");
-        util.api_precondition_is_defined(reaction_id, "reaction_id is undefined");
-        util.api_precondition_is_defined(user_id, "user_id is undefined");
+        util.api_precondition_is_defined(comment_id, "Could not parse comment_id int");
+        util.api_precondition_is_defined(reaction_id, "Could not parse reaction_id int");
+        util.api_precondition_is_defined(user_id, "Could not parse user_id int");
 
 
         comments_service.remove_comment_reaction(comment_id, reaction_id, user_id)
