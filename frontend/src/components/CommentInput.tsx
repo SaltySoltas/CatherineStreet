@@ -33,17 +33,18 @@ export function CommentInput({site_url, username, cur_comments, add_comment} : C
         console.log(`Submitting comment = ${comment_body}`);
         console.log(`current list =  ${cur_comments}`);
         const new_comment_list = [...cur_comments, comment_body];
+        setContent('');
         add_comment(new_comment_list);
     }
 
     return (
         <div id="commentInput">
 
-            <TextField id="comment-input-text" label="Outlined" variant="outlined"
+            <TextField id="comment-input-text" label="Add a comment" variant="outlined"
             value={comment_body}
             onChange={contentDidChange} />
 
-            <Button variant="contained" onClick={SubmitComment}>Submit</Button>
+            <Button variant="contained" disabled={comment_body===''} onClick={SubmitComment}>Submit</Button>
 
 {/* 
             <form onSubmit={SubmitComment}>
