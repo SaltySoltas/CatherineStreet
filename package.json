@@ -37,9 +37,9 @@
     "winston": "^3.3.3"
   },
   "scripts": {
-    "start": "cd backend && nodemon ./server.ts",
-    "build": "cd frontend && webpack --config ./webpack-config.js",
-    "watch": "cd frontend && webpack --config ./webpack-config-dev.js",
+    "start": "(cd backend && nodemon ./server.ts)",
+    "build": "(cd frontend && webpack --config ./webpack-config.js)",
+    "watch": "(cd frontend && webpack --config ./webpack-config-dev.js)",
     "clean": "rm ./frontend/dist/* ./extensions/chrome/dist/*"
   }
 }

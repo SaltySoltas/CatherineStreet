@@ -42,13 +42,22 @@ import util_sql from '../sql/util_sql';
         return new Promise((resolve, reject) => {
             get_website_id(url, db)
             .then(site_id => {
-                db.pquery(comments_sql.get_comments(site_id, start, limit), reject, (result:any) => {
-                    resolve(result);
+                db.pquery(comments_sql.get_comments(site_id, start, limit), reject, (comments:any) => {
+                    let promises = comments.map((comment: any) => new Promise((resolve) => {
+                        get_comment_reactions(comment.comment_id)
+                        .then(reactions => {
+                            resolve({
+                                ...comment,
+                                reactions: reactions
+                            })
+                        })
+                    }));
+                    resolve(Promise.all(promises));
                 });
             })
             .catch(err => {
                 reject(err);
-            })
+            });
         })
     }
 

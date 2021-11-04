@@ -25,14 +25,15 @@ export function CommentInput({site_url, username, cur_comments, add_comment} : C
 
     const contentDidChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         console.log("new comment body: ", e.target.value);
-        setContent(e.target.value);
+        setContent(e.target.value,);
+        console.log(comment_body);
     }
 
     const SubmitComment = () => {
         // fetch(PAGE_COMMENTS_PATH, requestOptions(site_url, comment_body));
         console.log(`Submitting comment = ${comment_body}`);
         console.log(`current list =  ${cur_comments}`);
-        const new_comment_list = [...cur_comments, comment_body];
+        const new_comment_list = [...cur_comments, {body: comment_body, username: username}];
         setContent('');
         add_comment(new_comment_list);
     }
@@ -46,14 +47,6 @@ export function CommentInput({site_url, username, cur_comments, add_comment} : C
 
             <Button variant="contained" disabled={comment_body===''} onClick={SubmitComment}>Submit</Button>
 
-{/* 
-            <form onSubmit={SubmitComment}>
-                <label>
-                    <input type="text" id="content" placeholder ="What do you have to say about this?"
-                        value={comment_body} onChange={(e)=>contentDidChange(e)}/>
-                    <input type="submit" name="Post"/>
-                </label>
-            </form> */}
         </div>
     );
     
