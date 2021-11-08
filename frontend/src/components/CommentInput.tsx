@@ -1,21 +1,21 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react';
-import { JsonObjectExpression } from 'typescript';
-import { BASE_PATH, PAGE_COMMENTS_PATH } from '../constants'
+import React, { useState } from 'react';
+import {Comment} from '../constants/types'
 import {TextField, Button} from '@mui/material';
 
 interface CommentInputProps {
     site_url: string,
     username: string,
-    cur_comments: string[],
+    cur_comments: Comment[],
     add_comment : Function
 };
 
-const requestOptions = (site_url : string, content:string) => {
+const requestOptions = (site_url : string, content:string, parent_id?:number ) => {
     console.log(content);
     return {
         method: 'POST',
         headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({'user_id':1,'url':site_url,'text':content})
+        body: JSON.stringify({'user_id':1,'url':site_url,'text':content, 'parent_id':parent_id})
+        //{user_id, url, text, parent_id}
     };
 }
 
@@ -30,12 +30,21 @@ export function CommentInput({site_url, username, cur_comments, add_comment} : C
     }
 
     const SubmitComment = () => {
-        // fetch(PAGE_COMMENTS_PATH, requestOptions(site_url, comment_body));
-        console.log(`Submitting comment = ${comment_body}`);
-        console.log(`current list =  ${cur_comments}`);
-        const new_comment_list = [...cur_comments, {body: comment_body, username: username}];
-        setContent('');
-        add_comment(new_comment_list);
+        fetch("/api/comments", requestOptions(site_url, comment_body))
+        .then(res => {
+            if(!res.ok){
+                throw new Error(res.statusText);
+            }
+            console.log(`Submitting comment = ${comment_body}`);
+            console.log(`current list =  ${cur_comments}`);
+            const new_comment_list =  [{body: comment_body, username: username}, ...cur_comments];
+            setContent('');
+            add_comment(new_comment_list);
+        })
+        .catch(err => {
+            alert(err);
+        });
+
     }
 
     return (

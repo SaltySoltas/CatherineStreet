@@ -1,23 +1,10 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react';
-import { JsonObjectExpression } from 'typescript';
-import { FormControl, Select, MenuItem, InputLabel, NativeSelect,Divider, List} from '@mui/material';
-import { BASE_PATH, PAGE_COMMENTS_PATH } from '../constants'
-import { Comment } from './Comment';
+import React from 'react';
+import { List} from '@mui/material';
+import { Comment } from '../constants/types';
+import { CommentBox } from './CommentBox';
 
 interface CommentContainerProps {
-    comments: {
-        body: string, 
-        username: string
-    }[];
-}
-
-const requestOptions = (site_url : string, content:string) => {
-    console.log(content);
-    return {
-        method: 'GET',
-        headers: {'Content-Type':'application/json', 'Accept':'application/json'},
-        body: JSON.stringify({'url': site_url, 'start': 0, 'limit': 30})
-    };
+    comments: Comment[];
 }
 
 function get_current_page(comment_list: any[]){
@@ -28,14 +15,16 @@ function get_current_page(comment_list: any[]){
     //create comment componnent given results
     //return list of comment components
     
-    return comment_list.map(comment => (<div><Comment comment_body={comment.body} username={comment.username}/></div>));
+    return comment_list.map((comment, idx) => (<div key={idx}><CommentBox comment_body={comment.body || comment.comment_text} username={comment.username || comment.first_name}/></div>));
     
 }
 
 export function CommentContainer({comments} : CommentContainerProps) : JSX.Element {
     // const [comment_idx, update_comment_idx] = useState(0);
     let current_page = get_current_page(comments);
-    console.log("current_page", current_page)
+    console.log("current_page", current_page);
+
+    
 
 
     
