@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS `comments` (
     created_at datetime DEFAULT now(),
     user_id bigint(20) unsigned NOT NULL,
     website_id bigint(20) unsigned NOT NULL,
+    parent_id bigint(20) unsigned DEFAULT NULL,
     PRIMARY KEY (comment_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (website_id) REFERENCES websites(website_id),
