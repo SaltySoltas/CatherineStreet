@@ -20,6 +20,7 @@ class mysql_db {
 
     // For querying the db within a promise, handles rejecting with errors automatically
     public pquery(query: string, fail_cb: any, cb: any){
+        console.log(query);
         this.connection.query(query, (err, result) => {
             if(err){
                 fail_cb(err);

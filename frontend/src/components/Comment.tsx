@@ -12,7 +12,7 @@ interface CommentProps {
     //comment_id : number
 }
 
-export function CommentBox({comment_body, username} : CommentProps) : JSX.Element {
+export function Comment({comment_body, username} : CommentProps) : JSX.Element {
   const [reactions, update_reactions] = useState({});
     return (     <div>
     <ListItem alignItems="flex-start">
