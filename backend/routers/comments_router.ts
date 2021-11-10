@@ -8,7 +8,7 @@ comments_router.get('/test', (req: express.Request, res: express.Response) => {
 })
 
 comments_router.get('/site_id/:url', comments_controller.get_site_id_test);
-comments_router.get('/:url', comments_controller.get_comments);
+comments_router.get('/', comments_controller.get_comments);
 
 comments_router.post('/', comments_controller.post_comment);
 

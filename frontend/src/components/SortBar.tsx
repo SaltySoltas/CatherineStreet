@@ -1,6 +1,7 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { JsonObjectExpression } from 'typescript';
-import { SortType, convertStrToSortType } from '../constants';
+import { SortType } from '../constants/types';
+import {convertStrToSortType} from '../constants/constants';
 import { FormControl, Select, MenuItem, InputLabel, NativeSelect} from '@mui/material';
 
 

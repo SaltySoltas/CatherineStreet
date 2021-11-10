@@ -52,7 +52,7 @@ export default {
     },
 
     get_comments (req: express.Request, res: express.Response) {
-        let {url} = req.params;
+        let url = req.query['url'] as string;
         let {parent_id, start, limit} = util.parse_query_ints(req);
 
         if(util.is_undefined(req.query['parent_id'])) parent_id = null;
