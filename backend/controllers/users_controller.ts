@@ -1,22 +1,15 @@
 import express from 'express';
 import users_service from '../services/users_service';
+import util from './util';
 
 
 export default {
     get_user_by_id (req: express.Request, res: express.Response) {
-        let id = req.params.id;
-        if(!id){
-            res.status(400).send("Missing user id");
-            return;
-        }
+        let {user_id} = util.parse_path_ints(req);
 
-        let id_int = parseInt(id);
-        if(isNaN(id_int)){
-            res.status(400).send("Could not parse int");
-            return;
-        }
+        util.api_precondition_is_defined(user_id, "Could not parse user_id int");
 
-        users_service.get_user_by_id(id_int)
+        users_service.get_user_by_id(user_id)
         .then(user => {
             res.status(200).send(user);
         })
@@ -27,10 +20,9 @@ export default {
 
     create_new_user (req: express.Request, res: express.Response) {
         let {first_name, last_name} = req.body;
-        if(!first_name || !last_name){
-            res.status(400).send("Invalid first or last name");
-            return;
-        }
+
+        util.api_precondition(!!first_name, "Invalid first name");
+        util.api_precondition(!!last_name, "Invalid last name");
     
         users_service.create_new_user(first_name, last_name)
         .then(new_user_id => {

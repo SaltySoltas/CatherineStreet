@@ -12,12 +12,15 @@ class mysql_db {
             database: process.env.MYSQL_DB
         });
         this.connection.connect(err => {
-            if(err) throw err;
+            if(err) {
+                console.error(err);
+            }
         });
     }
 
     // For querying the db within a promise, handles rejecting with errors automatically
     public pquery(query: string, fail_cb: any, cb: any){
+        console.log(query);
         this.connection.query(query, (err, result) => {
             if(err){
                 fail_cb(err);
