@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { CommentInput } from "./components/CommentInput";
 import { MainContainer } from "./components/MainContainer";
 import {User} from './constants/types';
@@ -7,6 +7,18 @@ interface AppProps {}
 
 export default function App(props: AppProps) {
   console.log("APP REFRESH");
+
+  useEffect(() => {
+    // Chrome login
+    if(!!chrome.identity){
+      console.log("Detected chrome browser");
+      chrome.identity.getAuthToken({interactive: true}, function(token) {
+        console.log(token);
+      });
+    }else{
+      console.log("Unsupported browser detected");
+    }
+  }, []);
 
   const [curUser, changeUser] = useState({
     first_name: "John",
