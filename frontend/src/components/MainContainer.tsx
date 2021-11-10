@@ -44,7 +44,7 @@ export function MainContainer({ site_url, user }: MainProps) {
       height: '600px'
     }}>
       <SortBar cur_sort_type={sort_type} set_sort_type={set_sort_type}/>
-      <CommentContainer comments={comment_list}/>
+      <CommentContainer comments={comment_list} update_comments={update_comment_list}/>
       <CommentInput site_url={site_url} username={user.username} cur_comments={comment_list} add_comment={update_comment_list}/>
     </div>
   );

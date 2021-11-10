@@ -3967,6 +3967,11 @@ onetime@^5.1.2:
   dependencies:
     mimic-fn "^2.1.0"
 
+openmoji@^13.1.0:
+  version "13.1.0"
+  resolved "https://registry.yarnpkg.com/openmoji/-/openmoji-13.1.0.tgz#ef69730f1efcc65d70871aa518e1517c6a7232c7"
+  integrity sha512-rOY6DKqnCPCU9D8lu/SK1cMVQjiBsiJRT4be+GV+WXPcd1os6AKWKtfGWhz0oIWhTrUB8WbLG72IkTt7l3h6Qw==
+
 os-homedir@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/os-homedir/-/os-homedir-1.0.2.tgz#ffbc4988336e0e833de0c168c7ef152121aa7fb3"

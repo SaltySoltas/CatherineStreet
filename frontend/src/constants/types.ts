@@ -11,8 +11,8 @@ export type Reaction = {
 };
 
 export type Comment = {
-    body: string;
-    username: string;
+    comment_text: string;
+    first_name: string;
     reactions: Reaction[];
 }
 
