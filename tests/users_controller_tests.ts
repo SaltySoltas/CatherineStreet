@@ -9,7 +9,7 @@ import { fail } from 'assert';
     private exprReq: express.Request;
 
     before() {
-        this.exprReq = mock(express.request)
+       this.exprReq = mock(express.request)
     }
 
     @test 'create new user success'() {
