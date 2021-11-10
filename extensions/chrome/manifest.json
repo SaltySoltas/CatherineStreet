@@ -4,10 +4,16 @@
     "version": "1.0",
     "manifest_version": 3,
     "permissions": [
-      "identity"
+      "identity",
+      "identity.email"
     ],
     "action": {
       "default_title": "Catherine Street",
       "default_popup": "dist/index.html"
-    }
+    },
+    "host_permissions": [
+      "https://localhost:8080/api/*",
+      "http://localhost:8080/api/*"
+
+    ]
   }

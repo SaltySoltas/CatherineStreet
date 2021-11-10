@@ -12,8 +12,8 @@ export default function App(props: AppProps) {
     // Chrome login
     if(!!chrome.identity){
       console.log("Detected chrome browser");
-      chrome.identity.getAuthToken({interactive: true}, function(token) {
-        console.log(token);
+      chrome.identity.getProfileUserInfo(function(userInfo) {
+        console.log(userInfo);
       });
     }else{
       console.log("Unsupported browser detected");
