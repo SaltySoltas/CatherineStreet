@@ -41,10 +41,20 @@ function is_undefined(v: any){
     return typeof v === 'undefined';
 }
 
+function is_big_int(v: string){
+    try{
+        BigInt(v);
+        return true;
+    }catch(_){
+        return false;
+    }
+}
+
 export default {
     parse_path_ints,
     parse_query_ints,
     api_precondition,
     api_precondition_is_defined,
-    is_undefined
+    is_undefined,
+    is_big_int
 }

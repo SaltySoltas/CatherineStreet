@@ -2,10 +2,12 @@
     "name": "Catherine Street",
     "description": "A browser extension that enaables discussion on any webpage.",
     "version": "1.0",
+    "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2l9ZuYCYJj/1U86mcvhTq/EP5wpuw+Ythcc+3UcF/mGFrhzhaq9VB3dDkF5OcvycGRcMM+nxH1UvPa9iq/pQ4tuMhGVidYC1VrSO2zCiOEuOzh7SpFoy9v25t2+JLccZkNgZG3deXV2jSFC3jM8IJpRTERQ67i1mL1wfDyDCeKbI37kVhC+OnNO62tuqgFgGNN/C8qfITjH3YqtRAXtKrFEsqFlNYGf4JMtVoqLiceNIg6AXYLPOU9axo0AqVWso8JKobzfYxamHq0sdB2xpyx9aBV1rrs8VVg5ouX0tqCGbrSMene90S3C5OPN/NK8qatPWrtEu/fclYCnktGUFkQIDAQAB",
     "manifest_version": 3,
     "permissions": [
       "identity",
-      "identity.email"
+      "identity.email",
+      "tabs"
     ],
     "action": {
       "default_title": "Catherine Street",
@@ -14,6 +16,11 @@
     "host_permissions": [
       "https://localhost:8080/api/*",
       "http://localhost:8080/api/*"
-
-    ]
+    ],
+    "oauth2": {
+      "client_id": "562754766536-jhjc7sagtpgc972df735o951kkguinnd.apps.googleusercontent.com",
+      "scopes": [
+          "profile email"
+      ]
+    }
   }

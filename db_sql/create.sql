@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS `users` (
     user_id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
     first_name varchar(30) NOT NULL,
     last_name varchar(30) NOT NULL,
-    google_id bigint(20) unsigned DEFAULT NULL
+    google_id varchar(40) DEFAULT NULL,
     profile_pic_path varchar(1024),
     net_score bigint(20) unsigned NOT NULL DEFAULT 0,
     PRIMARY KEY (user_id)

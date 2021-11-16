@@ -12,7 +12,6 @@ interface comment {
     website_id: number;
     parent_id: number | null;
     reactions: reaction[];
-    children: comment[]
 }
 
 interface reaction {
