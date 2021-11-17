@@ -1,25 +1,27 @@
 import React, { useState } from 'react';
-import {Comment} from '../constants/types'
+import {Comment, User} from '../constants/types'
 import {TextField, Button} from '@mui/material';
+import { COMMENTS_CREATE_URL } from '../constants/url_paths';
 
 interface CommentInputProps {
     site_url: string,
-    username: string,
+    user: User,
     cur_comments: Comment[],
     add_comment : Function
 };
 
-const requestOptions = (site_url : string, content:string, parent_id?:number ) => {
-    console.log(content);
-    return {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({'user_id':1,'url':site_url,'text':content, 'parent_id':parent_id})
-        //{user_id, url, text, parent_id}
-    };
-}
 
-export function CommentInput({site_url, username, cur_comments, add_comment} : CommentInputProps) : JSX.Element {
+export function CommentInput({site_url, user, cur_comments, add_comment} : CommentInputProps) : JSX.Element {
+
+    const requestOptions = (site_url : string, content:string, parent_id?:number ) => {
+        console.log(content);
+        return {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({'user_id':user.user_id,'url':site_url,'text':content, 'parent_id':parent_id})
+            //{user_id, url, text, parent_id}
+        };
+    }
 
     const [comment_body, setContent] = useState('');
 
@@ -30,14 +32,14 @@ export function CommentInput({site_url, username, cur_comments, add_comment} : C
     }
 
     const SubmitComment = () => {
-        fetch("/api/comments", requestOptions(site_url, comment_body))
+        fetch(COMMENTS_CREATE_URL, requestOptions(site_url, comment_body))
         .then(res => {
             if(!res.ok){
                 throw new Error(res.statusText);
             }
             console.log(`Submitting comment = ${comment_body}`);
             console.log(`current list =  ${cur_comments}`);
-            const new_comment_list =  [{body: comment_body, username: username}, ...cur_comments];
+            const new_comment_list =  [{comment_text: comment_body, first_name: user.first_name, last_name: user.last_name, reactions: []}, ...cur_comments];
             setContent('');
             add_comment(new_comment_list);
         })

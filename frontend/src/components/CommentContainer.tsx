@@ -8,34 +8,14 @@ interface CommentContainerProps {
   update_comments: Function;
 }
 
-function get_current_page(comment_list: Comment[]): JSX.Element[] {
-  //Fetch Comment JSON
 
-  //fetch num_comments from db
-  //get results
-  //create comment componnent given results
-  //return list of comment components
-
-  return;
-}
-
-export function CommentContainer({
-  comments,
-  update_comments,
-}: CommentContainerProps): JSX.Element {
+export function CommentContainer({comments} : CommentContainerProps) : JSX.Element {
+  function get_current_page(comment_list: Comment[]): JSX.Element[] {
+      return comment_list.map((comment, idx) => (<div key={idx}><CommentBox comment={comment}/></div>));
+  }
 
   // const [comment_idx, update_comment_idx] = useState(0);
-  let current_page: JSX.Element[] = comments.map((comment, idx) => (
-    <div key={idx}>
-      <CommentBox
-        comments={comments}
-        comment_idx={idx}
-        update_comments={update_comments}
-      />
-    </div>
-  ));
-
-  
+  let current_page = get_current_page(comments);
   console.log("current_page", current_page);
 
   return (

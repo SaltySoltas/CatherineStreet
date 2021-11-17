@@ -11,14 +11,15 @@ export type Reaction = {
 };
 
 export type Comment = {
-    comment_text: string;
-    first_name: string;
+    comment_text: string,
+    first_name: string,
+    last_name: string
     reactions: Reaction[];
 }
 
 export type User = {
     first_name: string;
     last_name: string;
-    username: string;
+    google_id: string;
     user_id: number;
 }
