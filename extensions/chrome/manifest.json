@@ -6,7 +6,6 @@
     "manifest_version": 3,
     "permissions": [
       "identity",
-      "identity.email",
       "tabs"
     ],
     "action": {
@@ -20,7 +19,7 @@
     "oauth2": {
       "client_id": "562754766536-jhjc7sagtpgc972df735o951kkguinnd.apps.googleusercontent.com",
       "scopes": [
-          "profile email"
+          "profile"
       ]
     }
   }

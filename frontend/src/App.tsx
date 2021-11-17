@@ -72,6 +72,7 @@ export default function App(props: AppProps) {
       doChromeLogin();
     }else{
       console.log("Unsupported browser detected");
+      changeCurView(Views.Error);
     }
   }, []);
 
