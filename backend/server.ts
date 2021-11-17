@@ -4,6 +4,7 @@ import path from 'path';
 import winston from 'winston';
 import expressWinston from 'express-winston';
 import main_router from './routers/main_router';
+import errors_middleware from './errors/errors_middleware';
 
 dotenv.config();
 
@@ -49,6 +50,11 @@ app.use('/api', main_router);
 app.get("/a", (req: any, res: any) => {
     res.send("Hello world!");
 });
+
+
+// THIS MUST BE THE LAST .use
+// So that all normal functionality is done BEFORE error handling
+app.use(errors_middleware);
 
 // start the express server
 app.listen( port, () => {

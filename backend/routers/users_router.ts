@@ -10,7 +10,8 @@ users_router.get('/test', (req: express.Request, res: express.Response) => {
 });
 
 // Get user by ID
-users_router.get('/:id', users_controller.get_user_by_id);
+users_router.get('/:user_id', users_controller.get_user_by_id);
+users_router.get('/google/:google_id', users_controller.get_user_by_google_id);
 
 // Create new user, respond with new user id
 users_router.post('/create', users_controller.create_new_user);

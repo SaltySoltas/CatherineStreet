@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS `users` (
     user_id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
     first_name varchar(30) NOT NULL,
     last_name varchar(30) NOT NULL,
+    google_id varchar(40) DEFAULT NULL,
     profile_pic_path varchar(1024),
     net_score bigint(20) unsigned NOT NULL DEFAULT 0,
     PRIMARY KEY (user_id)
@@ -26,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `comments` (
     created_at datetime DEFAULT now(),
     user_id bigint(20) unsigned NOT NULL,
     website_id bigint(20) unsigned NOT NULL,
-    score bigint(20) unsigned NOT NULL DEFAULT 0,
+    parent_id bigint(20) unsigned DEFAULT NULL,
     PRIMARY KEY (comment_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (website_id) REFERENCES websites(website_id),
@@ -42,4 +43,14 @@ CREATE TABLE IF NOT EXISTS `sessions` (
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     INDEX (user_id)
 )
+\! echo "Done"
+
+\! echo "Creating reactions table..."
+CREATE TABLE IF NOT EXISTS `reactions` (
+    comment_id bigint(20) unsigned NOT NULL,
+    reaction_id int,
+    user_id bigint(20) unsigned NOT NULL,
+    FOREIGN KEY (comment_id) REFERENCES comments(comment_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
 \! echo "Done"

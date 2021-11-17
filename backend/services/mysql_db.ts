@@ -13,7 +13,9 @@ class mysql_db {
             port: 3307
         });
         this.connection.connect(err => {
-            if(err) throw err;
+            if(err) {
+                console.error(err);
+            }
         });
     }
 
