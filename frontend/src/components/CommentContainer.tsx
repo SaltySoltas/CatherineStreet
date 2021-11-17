@@ -15,7 +15,7 @@ function get_current_page(comment_list: any[]){
     //create comment componnent given results
     //return list of comment components
     
-    return comment_list.map((comment, idx) => (<div key={idx}><CommentBox comment_body={comment.body || comment.comment_text} username={comment.username || comment.first_name}/></div>));
+    return comment_list.map((comment, idx) => (<div key={idx}><CommentBox comment={comment}/></div>));
     
 }
 
