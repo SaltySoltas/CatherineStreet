@@ -41,14 +41,18 @@ export default {
     },
 
     get_comment_reactions(comment_id: number) {
-        return `SELECT * 
+        return `SELECT reactions.*, users.first_name, users.last_name 
                     FROM \`reactions\` 
+                    JOIN \`users\`
+                        ON reactions.user_id = users.user_id
                     WHERE comment_id=${mysql.escape(comment_id)}`;
     },
 
     get_comment_reactions_bulk(comment_ids: number[]) {
-        return `SELECT * 
+        return `SELECT reactions.*, users.first_name, users.last_name 
                     FROM \`reactions\` 
+                    JOIN \`users\`
+                        ON reactions.user_id = users.user_id
                     WHERE comment_id IN (${mysql.escape(comment_ids)})`;
     }
 

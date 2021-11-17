@@ -39,7 +39,7 @@ export function CommentInput({site_url, user, cur_comments, add_comment} : Comme
             }
             console.log(`Submitting comment = ${comment_body}`);
             console.log(`current list =  ${cur_comments}`);
-            const new_comment_list =  [{comment_text: comment_body, first_name: user.first_name, last_name: user.last_name, reactions: []}, ...cur_comments];
+            const new_comment_list =  [{comment_text: comment_body, first_name: user.first_name, last_name: user.last_name, reactions: {}}, ...cur_comments];
             setContent('');
             add_comment(new_comment_list);
         })

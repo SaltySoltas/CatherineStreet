@@ -19,6 +19,10 @@ export const COMMENTS_GET_URL = (url: string, start: number, limit: number, pare
     return ret.href;
 }
 
+export const TOGGLE_REACTION_URL = (comment_id: number, reaction_id: number, user_id: number) => {
+    return uj(COMMENTS_BASE_URL, comment_id.toString(), "reactions", reaction_id.toString(), user_id.toString());
+}
+
 export const USERS_BASE_URL = uj(API_BASE_URL, 'users');
 
 export const USERS_CREATE_URL = uj(USERS_BASE_URL, 'create');

@@ -5,21 +5,21 @@ export enum SortType {
     MyComments,
 }
 
-export type Reaction = {
-    id: number;
-    clicks: number;
-};
-
 export type Comment = {
     comment_text: string,
+    comment_id: number,
     first_name: string,
-    last_name: string
-    reactions: Reaction[];
+    last_name: string,
+    reactions: {
+        [key: number]: {
+            [key: number]: User
+        }
+    }
 }
 
 export type User = {
     first_name: string;
     last_name: string;
-    google_id: string;
+    google_id?: string;
     user_id: number;
 }

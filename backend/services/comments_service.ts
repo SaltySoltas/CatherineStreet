@@ -1,24 +1,7 @@
 import mysql_db from '../services/mysql_db';
 import comments_sql from '../sql/comments_sql';
 import util_sql from '../sql/util_sql';
-
-interface comment {
-    comment_id: number;
-    comment_text: string;
-    created_at: object;
-    user_id: number;
-    first_name: string;
-    last_name: string;
-    website_id: number;
-    parent_id: number | null;
-    reactions: reaction[];
-}
-
-interface reaction {
-    comment_id: number;
-    reaction_id: number;
-    user_id: number;
-}
+import { Comment, Reaction, User } from '../types';
 
 
 
@@ -61,7 +44,7 @@ interface reaction {
         return new Promise((resolve, reject) => {
             get_website_id(url, db)
             .then(site_id => {
-                db.pquery(comments_sql.get_comments(site_id, parent_id, start, limit), reject, (comments: comment[]) => {
+                db.pquery(comments_sql.get_comments(site_id, parent_id, start, limit), reject, (comments: Comment[]) => {
                     attach_reactions(comments, db)
                     .then(resolve)
                     .catch(err => reject(err));
@@ -73,16 +56,16 @@ interface reaction {
         })
     }
 
-    function attach_reactions(comments: comment[], db: mysql_db): Promise<comment[]>{
+    function attach_reactions(comments: Comment[], db: mysql_db): Promise<Comment[]>{
         return new Promise((resolve, reject) => {
-            let comment_ids = comments.map((comment: comment) => comment.comment_id);
+            let comment_ids = comments.map((comment: Comment) => comment.comment_id);
             if(comment_ids.length === 0){
                 resolve([]);
                 return;
             }
-            db.pquery(comments_sql.get_comment_reactions_bulk(comment_ids), reject, (reactions: reaction[]) => {
+            db.pquery(comments_sql.get_comment_reactions_bulk(comment_ids), reject, (reactions: Reaction[]) => {
                 let reactionLists: any = {};
-                reactions.forEach((reaction: reaction) => {
+                reactions.forEach((reaction: Reaction) => {
                     if(reaction.comment_id in reactionLists){
                         reactionLists[reaction.comment_id].push(reaction);
                     }else{
@@ -91,7 +74,21 @@ interface reaction {
                 })
 
                 for(let i = 0; i < comments.length; i++){
-                    comments[i]['reactions'] = reactionLists[comments[i]['comment_id']] || [];
+                    comments[i]['reactions'] = {};
+                    // comments[i]['reactions'] = reactionLists[comments[i]['comment_id']] || [];
+                    if(!reactionLists[comments[i]['comment_id']]) continue;
+                    reactionLists[comments[i]['comment_id']].forEach((reaction: Reaction) => {
+                        let next: User = {
+                            user_id: reaction.user_id,
+                            first_name: reaction.first_name,
+                            last_name: reaction.last_name
+                        }
+                        if(!(reaction.reaction_id in comments[i]['reactions'])){
+                            comments[i]['reactions'][reaction.reaction_id] = {}
+                        }
+                        comments[i]['reactions'][reaction.reaction_id][reaction.user_id] = next;
+                     
+                    });
                 }
                 resolve(comments);
             });
@@ -120,7 +117,7 @@ interface reaction {
     function get_comment_reactions(comment_id: number){
         let db = new mysql_db();
         return new Promise((resolve, reject) => {
-            db.pquery(comments_sql.get_comment_reactions(comment_id), reject, (result: reaction[]) => {
+            db.pquery(comments_sql.get_comment_reactions(comment_id), reject, (result: Reaction[]) => {
                 resolve(result)
             });
         });
@@ -128,7 +125,7 @@ interface reaction {
 
     function get_comment_reactions_bulk(comment_ids: number[], db = new mysql_db()){
         return new Promise((resolve, reject) => {
-            db.pquery(comments_sql.get_comment_reactions_bulk(comment_ids), reject, (result: reaction[]) => {
+            db.pquery(comments_sql.get_comment_reactions_bulk(comment_ids), reject, (result: Reaction[]) => {
                 resolve(result);
             });
         })

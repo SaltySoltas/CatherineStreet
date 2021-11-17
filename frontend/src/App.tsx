@@ -3,6 +3,7 @@ import React, {useState, useEffect} from "react";
 import { MainContainer } from "./components/MainContainer";
 import { User } from "./constants/types";
 import { GOOGLE_LOGIN_URL } from "./constants/url_paths";
+import { UserProvider } from "./UserContext";
 
 enum Views {
   Loading = 1,
@@ -11,6 +12,7 @@ enum Views {
 }
 
 interface AppProps {}
+
 
 export default function App(props: AppProps) {
   console.log("APP REFRESH");
@@ -81,14 +83,16 @@ export default function App(props: AppProps) {
   const [curView, changeCurView] = useState(Views.Loading);
 
   return (
-    <div style={{
-      width: '300px',
-      height: '600px'
-    }}>
-      <br/>
-      {curView === Views.Loading && <CircularProgress />}
-      {curView === Views.App && <MainContainer site_url={curUrl} user={curUser}/>}
-      {curView === Views.Error && <div>Error: Could not log in. Make sure you are logged into your google account in the chrome browser</div>}
-    </div>
+    <UserProvider value={curUser}>
+      <div style={{
+        width: '300px',
+        height: '600px'
+      }}>
+        <br/>
+        {curView === Views.Loading && <CircularProgress />}
+        {curView === Views.App && <MainContainer site_url={curUrl} user={curUser}/>}
+        {curView === Views.Error && <div>Error: Could not log in. Make sure you are logged into your google account in the chrome browser</div>}
+      </div>
+    </UserProvider>
   );
 }

@@ -1,19 +1,12 @@
+import { User } from '../types';
 import mysql_db from '../services/mysql_db';
 import users_sql from '../sql/users_sql';
 
-
-interface user{
-    user_id: number;
-    google_id: string,
-    first_name: string;
-    last_name: string;
-}
-
-    function get_user_by_id (id: number): Promise<user> {
+    function get_user_by_id (id: number): Promise<User> {
         return new Promise((resolve, reject) => {
             let db = new mysql_db();
             let query = users_sql.get_user_by_id(id);
-            db.pquery(query, reject, (result: user[]) => {
+            db.pquery(query, reject, (result: User[]) => {
                     resolve(result[0] || null);
             });
         });

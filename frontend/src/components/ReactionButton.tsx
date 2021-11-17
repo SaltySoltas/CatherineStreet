@@ -1,35 +1,46 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
-import IconButton from "@mui/material/IconButton";
-import Stack from "@mui/material/Stack";
-import { ThumbUp, ThumbDown } from "@mui/icons-material";
-import { Reaction } from "../constants/types";
-import { Button } from "@mui/material";
-//const openmoji = require('openmoji');
+import React from "react";
+import { Button, Icon } from "@mui/material";
+const openmoji = require('openmoji');
+
 
 
 interface ReactionButtonProps {
-reaction: Reaction;
-  comment_id: number;
-  update_reactions : Function
-  reaction_idx: number;
+  reaction_id: number;
+  num_reacts: number;
+  has_reacted: boolean;
+  toggle: Function
 }
+
+//reaction_id={reaction_id} num_reacts={Object.keys(reactions[reaction_id]).length} has_reacted={has_reacted(reaction_id)} toggle={reaction_toggler(reaction_id)}
 
 
 export function ReactionButton({
-    reaction,
-    reaction_idx,
-    comment_id,
-    update_reactions
+    reaction_id,
+    num_reacts,
+    has_reacted,
+    toggle
 }: ReactionButtonProps): JSX.Element {
     //  > const openmoji = require('openmoji')
     //> const om = openmoji.openmojis[0]
     //> om.emoji
-
-    let {id, clicks} : Reaction = reaction;
-
-  
+    const src = `/dist/openmoji/svg/${openmoji.openmojis[reaction_id].hexcode}.svg`
+    console.log(src);
+    const emojiIcon = (
+        <Icon>
+            <img src={src}/>
+        </Icon>
+    );
 
     return(
-        <Button onClick={update_reactions(reaction_idx)}>{`${id} ${clicks}`}</Button>
+    <Button 
+        variant={has_reacted?"contained":"outlined"} 
+        startIcon={emojiIcon} 
+        onClick={(e) => {
+            console.log("clicked!");
+            toggle();
+        }}
+    >
+        {num_reacts}
+    </Button>
     );
 }

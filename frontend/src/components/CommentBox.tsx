@@ -6,11 +6,11 @@ import { Comment } from '../constants/types';
 
 interface CommentProps {
     comment: Comment
+    update_comment: Function
     //comment_id : number
 }
 
-export function CommentBox({comment} : CommentProps) : JSX.Element {
-  const [reactions, update_reactions] = useState({});
+export function CommentBox({comment, update_comment} : CommentProps) : JSX.Element {
     return (     
       <div>
       <ListItem alignItems="flex-start">
@@ -27,6 +27,7 @@ export function CommentBox({comment} : CommentProps) : JSX.Element {
         />
         <ReactionContainer
           comment={comment}
+          update_comment={update_comment}
         />
       </ListItem>
       <Divider variant="inset"/>

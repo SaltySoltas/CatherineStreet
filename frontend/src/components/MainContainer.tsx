@@ -10,8 +10,14 @@ interface MainProps {
   user: User;
 }
 
+enum Views {
+  Comments = 1,
+  Error
+}
+
 export function MainContainer({ site_url, user }: MainProps) {
 
+  const [cur_view, changeView] = useState(Views.Comments);
   const [sort_type, set_sort_type] = useState(SortType.Chronological);
   const [comment_list, update_comment_list] = useState([]);
 
@@ -30,6 +36,7 @@ export function MainContainer({ site_url, user }: MainProps) {
       })
       .catch(err => {
         console.error(err);
+        changeView(Views.Error);
       });
       
     }, []);
@@ -41,7 +48,8 @@ export function MainContainer({ site_url, user }: MainProps) {
   return (
     <div id="MainContainer">
       <SortBar cur_sort_type={sort_type} set_sort_type={set_sort_type}/>
-      <CommentContainer comments={comment_list}/>
+      {cur_view === Views.Comments && <CommentContainer comments={comment_list} update_comment_list={update_comment_list}/>}
+      {cur_view === Views.Error && <div> ERROR: Failed to fetch comments </div>}
       <CommentInput site_url={site_url} user={user} cur_comments={comment_list} add_comment={update_comment_list}/>
     </div>
   );
