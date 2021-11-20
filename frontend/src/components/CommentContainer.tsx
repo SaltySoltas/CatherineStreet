@@ -8,9 +8,10 @@ interface CommentContainerProps {
   comments: Comment[];
   update_comment_list: (comments: Comment[]) => void;
   get_next_comment_page: () => void;
+  allCommentsFetched: boolean;
 }
 
-export function CommentContainer({comments, update_comment_list, get_next_comment_page} : CommentContainerProps) : JSX.Element {
+export function CommentContainer({comments, update_comment_list, get_next_comment_page, allCommentsFetched} : CommentContainerProps) : JSX.Element {
   console.log("Cur comments: ", comments);
 
   const [prevY, changePrevY] = useState(0);
@@ -92,9 +93,10 @@ export function CommentContainer({comments, update_comment_list, get_next_commen
         spacing={2}
       >
         {comment_boxes}
-        <div ref={lref => (loadingRef = lref)}>
+        {!allCommentsFetched && <div ref={lref => (loadingRef = lref)}>
           <CircularProgress/>
-        </div>
+        </div>}
+        {allCommentsFetched && <div>No more comments to display</div>}
       </Stack>
     </div>
   );
