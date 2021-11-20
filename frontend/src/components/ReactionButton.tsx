@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Icon } from "@mui/material";
+import { Icon, IconButton, Typography } from "@mui/material";
 const openmoji = require('openmoji');
 
 
@@ -20,9 +20,6 @@ export function ReactionButton({
     has_reacted,
     toggle
 }: ReactionButtonProps): JSX.Element {
-    //  > const openmoji = require('openmoji')
-    //> const om = openmoji.openmojis[0]
-    //> om.emoji
     const src = `/dist/openmoji/svg/${openmoji.openmojis[reaction_id].hexcode}.svg`
     console.log(src);
     const emojiIcon = (
@@ -32,15 +29,17 @@ export function ReactionButton({
     );
 
     return(
-    <Button 
-        variant={has_reacted?"contained":"outlined"} 
-        startIcon={emojiIcon} 
-        onClick={(e) => {
-            console.log("clicked!");
-            toggle();
-        }}
+    <div>
+    <IconButton
+        onClick={(e) => {toggle()}}
+        size="small"
     >
-        {num_reacts}
-    </Button>
+        <div>
+        {emojiIcon}
+        <Typography variant="caption"><sub>{num_reacts}</sub></Typography>
+        </div>
+    </IconButton>
+    </div>
+
     );
 }

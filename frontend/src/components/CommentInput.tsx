@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {Comment, User} from '../constants/types'
-import {TextField, Button} from '@mui/material';
+import {TextField, Button, Paper, Stack, Divider} from '@mui/material';
 import { COMMENTS_CREATE_URL } from '../constants/url_paths';
 
 interface CommentInputProps {
@@ -50,15 +50,24 @@ export function CommentInput({site_url, user, cur_comments, add_comment} : Comme
     }
 
     return (
-        <div id="commentInput">
+        <Paper id="commentInput" style={{
+            position: "absolute",
+            bottom: 0,
+            border: '5px black',
+            width: "100%"
+          }}>
+            <Divider/>
+            <Stack direction="row" spacing={3}>
 
-            <TextField id="comment-input-text" label="Add a comment" variant="outlined"
-            value={comment_body}
-            onChange={contentDidChange} />
+                <TextField id="comment-input-text" label="Add a comment" variant="outlined"
+                value={comment_body}
+                onChange={contentDidChange} />
 
-            <Button variant="contained" disabled={comment_body===''} onClick={SubmitComment}>Submit</Button>
+                <Button variant="contained" disabled={comment_body===''} onClick={SubmitComment}>Submit</Button>
 
-        </div>
+            </Stack>
+
+        </Paper>
     );
     
 

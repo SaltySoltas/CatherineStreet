@@ -4,6 +4,35 @@ const FileManagerPlugin = require('filemanager-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const {ProvidePlugin} = require('webpack');
 
+let babelOptions = {
+  "presets": ["@babel/preset-react"],
+  "plugins": [
+      [
+        "babel-plugin-import",
+        {
+          "libraryName": "@mui/material",
+          "libraryDirectory": "",
+          "camel2DashComponentName": false,
+        },
+        "core",
+      ],
+      [
+        "babel-plugin-import",
+        {
+          "libraryName": "@mui/icons-material",
+          "libraryDirectory": "",
+          "camel2DashComponentName": false,
+        },
+        "icons",
+      ],
+      [
+          "babel-plugin-direct-import",
+          { "modules": ["@mui/material", "@mui/icons-material"] },
+      ],
+      "babel-plugin-lodash"
+    ]
+}
+
 module.exports = {
     entry: "./src",
     output: {
@@ -13,7 +42,15 @@ module.exports = {
         rules: [
           {
             test: /\.tsx?$/,
-            use: 'ts-loader',
+            use: [
+              {
+                loader: 'babel-loader',
+                options: babelOptions
+              },
+              {
+                loader: 'ts-loader'
+              }
+            ],
             include: path.join(__dirname, "src"),
             exclude: /node_modules/,
           },

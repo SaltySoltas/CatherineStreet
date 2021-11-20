@@ -9,3 +9,5 @@ export function convertStrToSortType(desiredSort : string) : types.SortType {
     return ret;
     
 }
+
+export const PAGE_LENGTH = 10;

@@ -84,15 +84,15 @@ export default function App(props: AppProps) {
 
   return (
     <UserProvider value={curUser}>
-      <div style={{
+      {/* <div style={{
         width: '300px',
         height: '600px'
-      }}>
+      }}> */}
         <br/>
         {curView === Views.Loading && <CircularProgress />}
         {curView === Views.App && <MainContainer site_url={curUrl} user={curUser}/>}
         {curView === Views.Error && <div>Error: Could not log in. Make sure you are logged into your google account in the chrome browser</div>}
-      </div>
+      {/* </div> */}
     </UserProvider>
   );
 }
