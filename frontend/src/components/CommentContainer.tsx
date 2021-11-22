@@ -9,9 +9,10 @@ interface CommentContainerProps {
   update_comment_list: (comments: Comment[]) => void;
   get_next_comment_page: () => void;
   allCommentsFetched: boolean;
+  changeParent: (parent: Comment) => void;
 }
 
-export function CommentContainer({comments, update_comment_list, get_next_comment_page, allCommentsFetched} : CommentContainerProps) : JSX.Element {
+export function CommentContainer({comments, update_comment_list, get_next_comment_page, allCommentsFetched, changeParent} : CommentContainerProps) : JSX.Element {
   console.log("Cur comments: ", comments);
 
   const [prevY, changePrevY] = useState(0);
@@ -26,16 +27,11 @@ export function CommentContainer({comments, update_comment_list, get_next_commen
   }
 
   useEffect(() => {
-    console.log("comp ", prevY, curY);
     if (prevY > curY) {
       get_next_comment_page();
     }
     changePrevY(curY);
   }, [curY]);
-
-  useEffect(() => {
-    console.log("prevY is ", prevY)
-  }, [prevY]);
 
   useEffect(() => {
     observer = new IntersectionObserver(
@@ -65,6 +61,7 @@ export function CommentContainer({comments, update_comment_list, get_next_commen
           <CommentBox 
             comment={comment}
             update_comment={comment_updater(idx)}
+            changeParent={changeParent}
           />
         </div>
         {idx < comment_list.length - 1 && <Divider/>}
@@ -74,8 +71,6 @@ export function CommentContainer({comments, update_comment_list, get_next_commen
   // const [comment_idx, update_comment_idx] = useState(0);
   let comment_boxes = generate_comment_boxes(comments);
   console.log("current_page", comment_boxes);
-
-  console.log("prevY currently = ", prevY);
 
   return (
     <div style={{

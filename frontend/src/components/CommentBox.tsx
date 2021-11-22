@@ -1,26 +1,27 @@
 import React, { useState } from 'react';
-import { ListItem, Divider, ListItemText, ListItemAvatar, Avatar, Popover, IconButton, Grid, Paper, Typography } from '@mui/material';
+import { Stack, Avatar, Popover, IconButton, Grid, Typography } from '@mui/material';
 import {deepOrange} from '@mui/material/colors';
 import {ReactionContainer} from './ReactionContainer';
 import { Comment } from '../constants/types';
 import AddReactionIcon from '@mui/icons-material/AddReaction';
-import { AnyNaptrRecord } from 'dns';
+import CommentIcon from '@mui/icons-material/Comment';
 
 interface CommentProps {
-    comment: Comment
-    update_comment: Function
+    comment: Comment;
+    update_comment: Function;
+    changeParent: (paren: Comment) => void;
     //comment_id : number
 }
 
-export function CommentBox({comment, update_comment} : CommentProps) : JSX.Element {
+export function CommentBox({comment, update_comment, changeParent} : CommentProps) : JSX.Element {
 
     const [anchorEl, setAnchorEl] = useState(null);
 
-    const handleClick = (event: any) => {
+    const handleReactionsClick = (event: any) => {
       setAnchorEl(event.currentTarget);
     };
 
-    const handleClose = () => {
+    const handleReactionsClose = () => {
       setAnchorEl(null);
     };
 
@@ -40,16 +41,21 @@ export function CommentBox({comment, update_comment} : CommentProps) : JSX.Eleme
           </Typography>
         </Grid>
         <Grid justifyContent="right" item xs>
-          <IconButton style={{float: "right"}} onClick={handleClick}>
-            <AddReactionIcon/>
+          <Stack>
+          <IconButton style={{float: "right"}} onClick={handleReactionsClick}>
+            <AddReactionIcon fontSize="small"/>
           </IconButton>
+          <IconButton style={{float: "right"}} onClick={(e) => changeParent(comment)}>
+              <CommentIcon fontSize="small"/>
+          </IconButton>
+          </Stack>
         </Grid>
       </Grid>
       <Popover 
         id={id}
         open={open}
         anchorEl={anchorEl}
-        onClose={handleClose}
+        onClose={handleReactionsClose}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'left',

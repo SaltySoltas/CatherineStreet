@@ -19,24 +19,24 @@ enum Views {
 
 export function MainContainer({ site_url, user }: MainProps) {
 
-  const [cur_parent, changeParent] = useState(null as number);
+  const [cur_parent, changeParent] = useState(null as Comment);
   const [cur_view, changeView] = useState(Views.Comments);
   const [sort_type, set_sort_type] = useState(SortType.Chronological);
   const [comment_list, update_comment_list] = useState([]);
   const [allCommentsFetched, setAllCommentsFetched] = useState(false);
 
-    const fetchNextCommentPage = () => {
-      console.log("Fetching comments", comment_list.length, PAGE_LENGTH, cur_parent);
-      let url = COMMENTS_GET_URL(site_url, comment_list.length, PAGE_LENGTH, cur_parent);
+    useEffect(() => {
+      fetchNextCommentPage([]);
+    }, [cur_parent]);
+
+    const fetchNextCommentPage = (prev_comments = comment_list) => {
+      let url = COMMENTS_GET_URL(site_url, prev_comments.length, PAGE_LENGTH, cur_parent?.comment_id);
       fetch(url)
       .then((res: Response) => res.json())
       .then((comments: Comment[]) => {
-        if(comments.length === 0){
-          setAllCommentsFetched(true);
-        }else{
-          let new_comments = [...comment_list, ...comments];
-          update_comment_list(new_comments);
-        }
+        setAllCommentsFetched(comments.length < PAGE_LENGTH);
+        let new_comments = [...prev_comments, ...comments];
+        update_comment_list(new_comments);
 
       })
       .catch(err => {
@@ -64,6 +64,7 @@ export function MainContainer({ site_url, user }: MainProps) {
         update_comment_list={update_comment_list} 
         get_next_comment_page={fetchNextCommentPage} 
         allCommentsFetched={allCommentsFetched}
+        changeParent={changeParent}
       />}
       {cur_view === Views.Error && <div> ERROR: Failed to fetch comments </div>}
       <CommentInput
@@ -71,6 +72,7 @@ export function MainContainer({ site_url, user }: MainProps) {
         user={user} 
         cur_comments={comment_list} 
         add_comment={update_comment_list}
+        cur_parent={cur_parent}
       />
       </Stack>
     </div>
