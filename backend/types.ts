@@ -8,6 +8,7 @@ export interface Comment {
     last_name: string;
     website_id: number;
     parent_id: number | null;
+    replies: number;
     reactions: {
         [key: number]: {
             [key: number]: User

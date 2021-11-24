@@ -1,9 +1,22 @@
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, createTheme, ThemeOptions, ThemeProvider } from "@mui/material";
 import React, {useState, useEffect} from "react";
 import { MainContainer } from "./components/MainContainer";
 import { User } from "./constants/types";
 import { GOOGLE_LOGIN_URL } from "./constants/url_paths";
 import { UserProvider } from "./UserContext";
+
+export const themeOptions: ThemeOptions = {
+  palette: {
+    primary: {
+      main: '#3f51b5',
+    },
+    secondary: {
+      main: '#f50057',
+    },
+  },
+};
+
+const theme = createTheme(themeOptions);
 
 enum Views {
   Loading = 1,
@@ -84,15 +97,12 @@ export default function App(props: AppProps) {
 
   return (
     <UserProvider value={curUser}>
-      {/* <div style={{
-        width: '300px',
-        height: '600px'
-      }}> */}
-        <br/>
-        {curView === Views.Loading && <CircularProgress />}
-        {curView === Views.App && <MainContainer site_url={curUrl} user={curUser}/>}
-        {curView === Views.Error && <div>Error: Could not log in. Make sure you are logged into your google account in the chrome browser</div>}
-      {/* </div> */}
+      <ThemeProvider theme={theme}>
+          <br/>
+          {curView === Views.Loading && <CircularProgress />}
+          {curView === Views.App && <MainContainer site_url={curUrl} user={curUser}/>}
+          {curView === Views.Error && <div>Error: Could not log in. Make sure you are logged into your google account in the chrome browser</div>}
+        </ThemeProvider>
     </UserProvider>
   );
 }

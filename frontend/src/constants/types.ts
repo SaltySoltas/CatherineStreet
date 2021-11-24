@@ -10,6 +10,7 @@ export type Comment = {
     comment_id: number,
     first_name: string,
     last_name: string,
+    replies: number
     reactions: {
         [key: number]: {
             [key: number]: User

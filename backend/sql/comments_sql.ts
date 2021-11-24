@@ -14,20 +14,26 @@ export default {
             parent_sql = `=${mysql.escape(parent_id)}`;
         }
 
-        return `SELECT comments.*, users.first_name, users.last_name 
+        return `SELECT comments.*, users.first_name, users.last_name, count(distinct children.comment_id) as replies
                     FROM \`comments\`
                     JOIN \`users\`
                         ON users.user_id = comments.user_id
-                    WHERE website_id=${mysql.escape(website_id)} AND parent_id${parent_sql}
+                    LEFT JOIN \`comments\` AS children
+                        ON children.parent_id = comments.comment_id
+                    WHERE comments.website_id=${mysql.escape(website_id)} AND comments.parent_id${parent_sql}
+                    GROUP BY comments.comment_id
                     LIMIT ${mysql.escape(start)}, ${mysql.escape(limit)}`;
     },
 
     get_comment_by_id(comment_id: number){
-        return `SELECT comments.*, users.first_name, users.last_name
+        return `SELECT comments.*, users.first_name, users.last_name, count(distinct children.comment_id) as replies
                     FROM \`comments\`
                     JOIN \`users\`
                         ON users.user_id = comments.user_id
-                    WHERE comment_id=${mysql.escape(comment_id)}`;
+                    LEFT JOIN \`comments\` AS children
+                        ON children.parent_id = comments.comment_id
+                    WHERE comments.comment_id=${mysql.escape(comment_id)}
+                    GROUP BY comments.comment_id`;
     },
 
     add_comment_reaction(comment_id: number, reaction_id: number, user_id: number) {

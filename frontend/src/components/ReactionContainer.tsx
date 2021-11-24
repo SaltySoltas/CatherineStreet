@@ -3,7 +3,7 @@ import Stack from "@mui/material/Stack";
 import { ReactionButton } from "./ReactionButton";
 import { Comment, User } from '../constants/types';
 import { UserContext } from "../UserContext";
-import SupportedReactions from "../constants/reaction_mappings";
+import SupportedReactions from "../constants/reaction_ids";
 import {TOGGLE_REACTION_URL} from '../constants/url_paths';
 import { Paper, Divider } from "@mui/material";
 

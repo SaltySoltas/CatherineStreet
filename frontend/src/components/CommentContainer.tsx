@@ -3,8 +3,8 @@ import { List, Divider, Stack, CircularProgress } from "@mui/material";
 import { Comment } from "../constants/types";
 import { CommentBox } from "./CommentBox";
 import {cloneDeep} from 'lodash';
-import InfiniteScroll from 'react-infinite-scroll-component';
 interface CommentContainerProps {
+  cur_parent: Comment
   comments: Comment[];
   update_comment_list: (comments: Comment[]) => void;
   get_next_comment_page: () => void;
@@ -12,7 +12,7 @@ interface CommentContainerProps {
   changeParent: (parent: Comment) => void;
 }
 
-export function CommentContainer({comments, update_comment_list, get_next_comment_page, allCommentsFetched, changeParent} : CommentContainerProps) : JSX.Element {
+export function CommentContainer({comments, update_comment_list, get_next_comment_page, allCommentsFetched, changeParent, cur_parent} : CommentContainerProps) : JSX.Element {
   console.log("Cur comments: ", comments);
 
   const [prevY, changePrevY] = useState(0);
@@ -53,7 +53,6 @@ export function CommentContainer({comments, update_comment_list, get_next_commen
     }
   }
 
-
   function generate_comment_boxes(comment_list: Comment[]): JSX.Element[] {
       return comment_list.map((comment, idx) => (
         <>
@@ -87,6 +86,19 @@ export function CommentContainer({comments, update_comment_list, get_next_commen
         }}
         spacing={2}
       >
+        {cur_parent !== null && 
+          <div key="parent_comment" style={{position: "sticky", top: 0, zIndex: 5}}>
+            <div>
+            <CommentBox
+              comment={cur_parent}
+              update_comment={changeParent}
+              changeParent={changeParent}
+              isParent
+            />
+            </div>
+            <Divider/>
+          </div>
+        }
         {comment_boxes}
         {!allCommentsFetched && <div ref={lref => (loadingRef = lref)}>
           <CircularProgress/>

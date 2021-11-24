@@ -65,6 +65,7 @@ export function MainContainer({ site_url, user }: MainProps) {
         get_next_comment_page={fetchNextCommentPage} 
         allCommentsFetched={allCommentsFetched}
         changeParent={changeParent}
+        cur_parent={cur_parent}
       />}
       {cur_view === Views.Error && <div> ERROR: Failed to fetch comments </div>}
       <CommentInput

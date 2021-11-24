@@ -23,9 +23,11 @@ export function ReactionButton({
     const src = `/dist/openmoji/svg/${openmoji.openmojis[reaction_id].hexcode}.svg`
     console.log(src);
     const emojiIcon = (
-        <Icon>
-            <img src={src}/>
-        </Icon>
+        <Badge badgeContent={num_reacts.toString()} color="primary" overlap="circular" style={{transform: "scale(0.7)"}}>
+            <Icon style={{transform: "scale(1.43)"}}>
+                <img src={src}/>
+            </Icon>
+        </Badge>
     );
 
     return(
@@ -41,14 +43,13 @@ export function ReactionButton({
     // </IconButton>
     // </div>
 
-    <Badge badgeContent={num_reacts.toString()} color="primary" overlap="circular">
-        <IconButton
-        onClick={(e) => {toggle()}}
-        size="small"
-        >
-            {emojiIcon}
-        </IconButton>
-    </Badge>
+    <IconButton
+    onClick={(e) => {toggle()}}
+    size="small"
+    >
+        
+        {emojiIcon}
+    </IconButton>
 
     );
 }

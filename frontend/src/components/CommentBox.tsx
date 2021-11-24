@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Stack, Avatar, Popover, IconButton, Grid, Typography } from '@mui/material';
+import { Stack, Avatar, Popover, IconButton, Grid, Typography, useTheme } from '@mui/material';
 import {deepOrange} from '@mui/material/colors';
 import {ReactionContainer} from './ReactionContainer';
 import { Comment } from '../constants/types';
@@ -10,11 +10,11 @@ interface CommentProps {
     comment: Comment;
     update_comment: Function;
     changeParent: (paren: Comment) => void;
-    //comment_id : number
+    isParent?: boolean;
 }
 
-export function CommentBox({comment, update_comment, changeParent} : CommentProps) : JSX.Element {
-
+export function CommentBox({comment, update_comment, changeParent, isParent} : CommentProps) : JSX.Element {
+    const theme = useTheme();
     const [anchorEl, setAnchorEl] = useState(null);
 
     const handleReactionsClick = (event: any) => {
@@ -29,7 +29,10 @@ export function CommentBox({comment, update_comment, changeParent} : CommentProp
     const id = open ? 'simple-popover' : undefined;
 
     return (     
-      <div>
+      <div style={{
+        background: theme.palette.background.paper,
+        zIndex: 1
+      }}>
       <Grid container wrap="nowrap" spacing={2}>
         <Grid item>
           <Avatar sx={{ bgcolor: deepOrange[500] }}>{comment.first_name[0].toUpperCase()}</Avatar>
@@ -42,12 +45,22 @@ export function CommentBox({comment, update_comment, changeParent} : CommentProp
         </Grid>
         <Grid justifyContent="right" item xs>
           <Stack>
-          <IconButton style={{float: "right"}} onClick={handleReactionsClick}>
-            <AddReactionIcon fontSize="small"/>
-          </IconButton>
-          <IconButton style={{float: "right"}} onClick={(e) => changeParent(comment)}>
-              <CommentIcon fontSize="small"/>
-          </IconButton>
+            <IconButton style={{float: "right"}} onClick={handleReactionsClick}>
+              <AddReactionIcon fontSize="small"/>
+            </IconButton>
+            {!isParent && 
+            <IconButton style={{float: "right"}} onClick={(e) => changeParent(comment)}>
+                <CommentIcon fontSize="small"/>
+                <div style={ {
+                  position: "absolute",
+                  right: 0,
+                  bottom: 0,
+                  fontSize: "50%", 
+                }}>
+                  {comment.replies}
+               </div>
+            </IconButton>
+            }
           </Stack>
         </Grid>
       </Grid>

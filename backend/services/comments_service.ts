@@ -8,11 +8,11 @@ import { Comment, Reaction, User } from '../types';
     // Optionally reuse existing db connection as parameter
     // Useful for internal calls
     // Get website id from websites table, or create new record and return new id if not found
-    function get_website_id(url: string, db = new mysql_db()): Promise<number> {
+    function get_website_id(url: string): Promise<number> {
         return new Promise((resolve, reject) => {
-            db.pquery(util_sql.get_website_by_url(url), reject, (result: any) => {
+            mysql_db.pquery(util_sql.get_website_by_url(url), reject, (result: any) => {
                 if(result.length === 0){
-                    db.pquery(util_sql.create_website_id(url), reject, (result: any) => {
+                    mysql_db.pquery(util_sql.create_website_id(url), reject, (result: any) => {
                         resolve(result['insertId']);
                     });
                 }else if(result.length === 1){
@@ -25,11 +25,10 @@ import { Comment, Reaction, User } from '../types';
     }
 
     function post_comment(user_id: number, url: string, text: string, parent_id: number | null){
-        let db = new mysql_db();
         return new Promise((resolve, reject) => {
-            get_website_id(url, db)
+            get_website_id(url)
             .then(site_id => {
-                db.pquery(comments_sql.create_comment(user_id, site_id, text, parent_id), reject, (result: any) => {
+                mysql_db.pquery(comments_sql.create_comment(user_id, site_id, text, parent_id), reject, (result: any) => {
                     resolve(result['insertId']);
                 })
             })
@@ -40,12 +39,11 @@ import { Comment, Reaction, User } from '../types';
     }
 
     function get_comments(url: string, parent_id: number | null, start: number, limit: number){
-        let db = new mysql_db();
         return new Promise((resolve, reject) => {
-            get_website_id(url, db)
+            get_website_id(url)
             .then(site_id => {
-                db.pquery(comments_sql.get_comments(site_id, parent_id, start, limit), reject, (comments: Comment[]) => {
-                    attach_reactions(comments, db)
+                mysql_db.pquery(comments_sql.get_comments(site_id, parent_id, start, limit), reject, (comments: Comment[]) => {
+                    attach_reactions(comments)
                     .then(resolve)
                     .catch(err => reject(err));
                 });
@@ -56,14 +54,14 @@ import { Comment, Reaction, User } from '../types';
         })
     }
 
-    function attach_reactions(comments: Comment[], db: mysql_db): Promise<Comment[]>{
+    function attach_reactions(comments: Comment[]): Promise<Comment[]>{
         return new Promise((resolve, reject) => {
             let comment_ids = comments.map((comment: Comment) => comment.comment_id);
             if(comment_ids.length === 0){
                 resolve([]);
                 return;
             }
-            db.pquery(comments_sql.get_comment_reactions_bulk(comment_ids), reject, (reactions: Reaction[]) => {
+            mysql_db.pquery(comments_sql.get_comment_reactions_bulk(comment_ids), reject, (reactions: Reaction[]) => {
                 let reactionLists: any = {};
                 reactions.forEach((reaction: Reaction) => {
                     if(reaction.comment_id in reactionLists){
@@ -97,35 +95,32 @@ import { Comment, Reaction, User } from '../types';
 
 
     function add_comment_reaction(comment_id: number, reaction_id: number, user_id: number) {
-        let db = new mysql_db();
         return new Promise((resolve, reject) => {
-            db.pquery(comments_sql.add_comment_reaction(comment_id, reaction_id, user_id), reject, (result: any) => {
+            mysql_db.pquery(comments_sql.add_comment_reaction(comment_id, reaction_id, user_id), reject, (result: any) => {
                 resolve(result)
             });
         });
     }
 
     function remove_comment_reaction(comment_id: number, reaction_id: number, user_id: number) {
-        let db = new mysql_db();
         return new Promise((resolve, reject) => {
-            db.pquery(comments_sql.remove_comment_reaction(comment_id, reaction_id, user_id), reject, (result: any) => {
+            mysql_db.pquery(comments_sql.remove_comment_reaction(comment_id, reaction_id, user_id), reject, (result: any) => {
                 resolve(result)
             });
         });
     }
 
     function get_comment_reactions(comment_id: number){
-        let db = new mysql_db();
         return new Promise((resolve, reject) => {
-            db.pquery(comments_sql.get_comment_reactions(comment_id), reject, (result: Reaction[]) => {
+            mysql_db.pquery(comments_sql.get_comment_reactions(comment_id), reject, (result: Reaction[]) => {
                 resolve(result)
             });
         });
     }
 
-    function get_comment_reactions_bulk(comment_ids: number[], db = new mysql_db()){
+    function get_comment_reactions_bulk(comment_ids: number[]){
         return new Promise((resolve, reject) => {
-            db.pquery(comments_sql.get_comment_reactions_bulk(comment_ids), reject, (result: Reaction[]) => {
+            mysql_db.pquery(comments_sql.get_comment_reactions_bulk(comment_ids), reject, (result: Reaction[]) => {
                 resolve(result);
             });
         })
