@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import Stack from "@mui/material/Stack";
 import { ReactionButton } from "./ReactionButton";
-import { Comment, User } from '../constants/types';
+import { Comment } from '../constants/types';
 import { UserContext } from "../UserContext";
 import SupportedReactions from "../constants/reaction_ids";
 import {TOGGLE_REACTION_URL} from '../constants/url_paths';
-import { Paper, Divider } from "@mui/material";
+import { Divider } from "@mui/material";
 
 const ROW_LENGTH: number = 5;
 
@@ -15,17 +15,17 @@ function _copy(a: any): any {
 
 interface ReactionContainerProps {
   comment: Comment;
-  update_comment: Function;
+  updateComment: Function;
 }
-export function ReactionContainer({ comment, update_comment }: ReactionContainerProps): JSX.Element {
+export function ReactionContainer({ comment, updateComment }: ReactionContainerProps): JSX.Element {
 
   const user = useContext(UserContext);
 
   let { reactions }: Comment = comment;
 
-  const has_reacted = (reaction_id: number): boolean => (user.user_id in (reactions[reaction_id] || {}));
+  const hasReacted = (reaction_id: number): boolean => (user.user_id in (reactions[reaction_id] || {}));
 
-  const add_reaction = (reaction_id: number) => {
+  const addReaction = (reaction_id: number) => {
     fetch(TOGGLE_REACTION_URL(comment.comment_id, reaction_id, user.user_id), {method: "PUT"})
     .then(res => {
       if(res.ok){
@@ -33,30 +33,29 @@ export function ReactionContainer({ comment, update_comment }: ReactionContainer
           reactions[reaction_id] = {}
         }
         reactions[reaction_id][user.user_id] = user;
-        update_comment(comment);
+        updateComment(comment);
       }
     });
   }
 
-  const remove_reaction = (reaction_id: number) => {
-    // Fetch (POST)
+  const removeReaction = (reaction_id: number) => {
     fetch(TOGGLE_REACTION_URL(comment.comment_id, reaction_id, user.user_id), {method: "DELETE"})
     .then(res => {
       if(res.ok){
         delete reactions[reaction_id][user.user_id];
-        update_comment(comment);
+        updateComment(comment);
       }
     });
   }
 
   const reaction_toggler = (reaction_id: number): Function => () => {
-    console.log("clicked ", reaction_id, _copy(comment), has_reacted(reaction_id));
-    if(has_reacted(reaction_id)){
+    console.log("clicked ", reaction_id, _copy(comment), hasReacted(reaction_id));
+    if(hasReacted(reaction_id)){
       console.log("Removing ", reaction_id);
-      remove_reaction(reaction_id);
+      removeReaction(reaction_id);
     }else{
       console.log("Adding ", reaction_id);
-      add_reaction(reaction_id);
+      addReaction(reaction_id);
     }
     console.log(_copy(comment));
   }
@@ -69,7 +68,7 @@ export function ReactionContainer({ comment, update_comment }: ReactionContainer
         <ReactionButton 
           reaction_id={reaction_id} 
           num_reacts={Object.keys(reactions[reaction_id] || {}).length} 
-          has_reacted={has_reacted(reaction_id)} 
+          has_reacted={hasReacted(reaction_id)} 
           toggle={reaction_toggler(reaction_id)}
         />
       </div>

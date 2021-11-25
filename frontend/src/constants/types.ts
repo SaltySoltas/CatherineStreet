@@ -24,3 +24,10 @@ export type User = {
     google_id?: string;
     user_id: number;
 }
+
+export type CommentThread = {
+    parent: Comment | null;
+    replies: Comment[]
+    all_fetched: boolean
+  }
+  

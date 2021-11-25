@@ -45,7 +45,7 @@ export default function App(props: AppProps) {
       console.log(token);
       if (chrome.runtime.lastError) {
         console.log(chrome.runtime.lastError);
-        changeCurView(Views.Error);
+        setCurView(Views.Error);
         return;
       }
       fetch(GOOGLE_LOGIN_URL, loginRequestOptions(token))
@@ -57,11 +57,11 @@ export default function App(props: AppProps) {
         }
       })
       .then(user => {
-        changeUser(user.user);
-        changeCurView(Views.App);
+        setCurUser(user.user);
+        setCurView(Views.App);
       })
       .catch(_ => {
-        changeCurView(Views.Error);
+        setCurView(Views.Error);
       });
     });
   }
@@ -74,7 +74,7 @@ export default function App(props: AppProps) {
       var tab = tabs[0];
       var url = tab.url;
       console.log("Setting active url to ", url);
-      changeCurUrl(url);
+      setCurUrl(url);
     });
   }
 
@@ -87,21 +87,21 @@ export default function App(props: AppProps) {
       doChromeLogin();
     }else{
       console.log("Unsupported browser detected");
-      changeCurView(Views.Error);
+      setCurView(Views.Error);
     }
   }, []);
 
-  const [curUser, changeUser] = useState(undefined as User);
-  const [curUrl, changeCurUrl] = useState(undefined as string);
-  const [curView, changeCurView] = useState(Views.Loading);
+  const [cur_user, setCurUser] = useState(undefined as User);
+  const [cur_url, setCurUrl] = useState(undefined as string);
+  const [cur_view, setCurView] = useState(Views.Loading);
 
   return (
-    <UserProvider value={curUser}>
+    <UserProvider value={cur_user}>
       <ThemeProvider theme={theme}>
           <br/>
-          {curView === Views.Loading && <CircularProgress />}
-          {curView === Views.App && <MainContainer site_url={curUrl} user={curUser}/>}
-          {curView === Views.Error && <div>Error: Could not log in. Make sure you are logged into your google account in the chrome browser</div>}
+          {cur_view === Views.Loading && <CircularProgress />}
+          {cur_view === Views.App && <MainContainer site_url={cur_url} user={cur_user}/>}
+          {cur_view === Views.Error && <div>Error: Could not log in. Make sure you are logged into your google account in the chrome browser</div>}
         </ThemeProvider>
     </UserProvider>
   );

@@ -1,5 +1,5 @@
 import React from "react";
-import { Badge, Icon, IconButton, Typography } from "@mui/material";
+import { Icon, IconButton } from "@mui/material";
 const openmoji = require('openmoji');
 
 
@@ -23,31 +23,27 @@ export function ReactionButton({
     const src = `/dist/openmoji/svg/${openmoji.openmojis[reaction_id].hexcode}.svg`
     console.log(src);
     const emojiIcon = (
-        <Badge badgeContent={num_reacts.toString()} color="primary" overlap="circular" style={{transform: "scale(0.7)"}}>
+        <>
             <Icon style={{transform: "scale(1.43)"}}>
                 <img src={src}/>
             </Icon>
-        </Badge>
+            <div style={ {
+                position: "absolute",
+                right: 0,
+                bottom: 0,
+                fontSize: "50%", 
+              }}>
+                {num_reacts}
+             </div>
+        </>
     );
 
     return(
-    // <div>
-    // <IconButton
-    //     onClick={(e) => {toggle()}}
-    //     size="small"
-    // >
-    //     <div>
-    //     {emojiIcon}
-    //     <Typography variant="caption"><sub>{num_reacts}</sub></Typography>
-    //     </div>
-    // </IconButton>
-    // </div>
 
     <IconButton
     onClick={(e) => {toggle()}}
     size="small"
     >
-        
         {emojiIcon}
     </IconButton>
 

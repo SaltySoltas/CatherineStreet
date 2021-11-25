@@ -6,14 +6,24 @@ import {cloneDeep} from 'lodash';
 interface CommentContainerProps {
   cur_parent: Comment
   comments: Comment[];
-  update_comment_list: (comments: Comment[]) => void;
-  get_next_comment_page: () => void;
+  updateCommentList: (comments: Comment[]) => void;
+  updateParent: (c: Comment) => void;
+  fetchNextCommentPage: () => void;
   allCommentsFetched: boolean;
-  changeParent: (parent: Comment) => void;
+  enterCommentThread: (c: Comment) => void;
+  exitCommentThread: () => void;
 }
 
-export function CommentContainer({comments, update_comment_list, get_next_comment_page, allCommentsFetched, changeParent, cur_parent} : CommentContainerProps) : JSX.Element {
-  console.log("Cur comments: ", comments);
+export function CommentContainer({
+  comments, 
+  updateCommentList, 
+  updateParent,
+  fetchNextCommentPage, 
+  allCommentsFetched, 
+  cur_parent, 
+  enterCommentThread, 
+  exitCommentThread} : CommentContainerProps) : JSX.Element {
+
 
   const [prevY, changePrevY] = useState(0);
   const [curY, changeCurY] = useState(0);
@@ -27,49 +37,51 @@ export function CommentContainer({comments, update_comment_list, get_next_commen
   }
 
   useEffect(() => {
+    console.log(`prevY = ${prevY}, curY = ${curY}`);
     if (prevY > curY) {
-      get_next_comment_page();
+      fetchNextCommentPage();
     }
     changePrevY(curY);
   }, [curY]);
 
   useEffect(() => {
-    observer = new IntersectionObserver(
-      handleObserver,
-      {
-        root: null,
-        rootMargin: "0px",
-        threshold: 1.0
-      }
-    );
-    observer.observe(loadingRef);
-  }, []);
+    if(!!loadingRef){
+      observer = new IntersectionObserver(
+        handleObserver,
+        {
+          root: null,
+          rootMargin: "0px",
+          threshold: 1.0
+        }
+      );
+      observer.observe(loadingRef);
+    }
+  }, [cur_parent]);
 
   const comment_updater = (i: number) => {
     return (new_comment: Comment) => {
       let new_comments = cloneDeep(comments);
       new_comments[i] = new_comment;
-      update_comment_list(new_comments);
+      updateCommentList(new_comments);
     }
   }
 
-  function generate_comment_boxes(comment_list: Comment[]): JSX.Element[] {
+
+  function generateCommentBoxes(comment_list: Comment[]): JSX.Element[] {
       return comment_list.map((comment, idx) => (
         <>
         <div key={idx}>
           <CommentBox 
             comment={comment}
-            update_comment={comment_updater(idx)}
-            changeParent={changeParent}
+            updateComment={comment_updater(idx)}
+            enterCommentThread={enterCommentThread}
           />
         </div>
         {idx < comment_list.length - 1 && <Divider/>}
         </>));
   }
 
-  // const [comment_idx, update_comment_idx] = useState(0);
-  let comment_boxes = generate_comment_boxes(comments);
-  console.log("current_page", comment_boxes);
+  let comment_boxes = generateCommentBoxes(comments);
 
   return (
     <div style={{
@@ -91,8 +103,8 @@ export function CommentContainer({comments, update_comment_list, get_next_commen
             <div>
             <CommentBox
               comment={cur_parent}
-              update_comment={changeParent}
-              changeParent={changeParent}
+              updateComment={updateParent}
+              exitCommentThread={exitCommentThread}
               isParent
             />
             </div>

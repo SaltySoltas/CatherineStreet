@@ -5,15 +5,17 @@ import {ReactionContainer} from './ReactionContainer';
 import { Comment } from '../constants/types';
 import AddReactionIcon from '@mui/icons-material/AddReaction';
 import CommentIcon from '@mui/icons-material/Comment';
+import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 
 interface CommentProps {
     comment: Comment;
-    update_comment: Function;
-    changeParent: (paren: Comment) => void;
+    updateComment: Function;
     isParent?: boolean;
+    enterCommentThread?: (c: Comment) => void;
+    exitCommentThread?: () => void;
 }
 
-export function CommentBox({comment, update_comment, changeParent, isParent} : CommentProps) : JSX.Element {
+export function CommentBox({comment, updateComment, isParent, enterCommentThread, exitCommentThread} : CommentProps) : JSX.Element {
     const theme = useTheme();
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -48,13 +50,18 @@ export function CommentBox({comment, update_comment, changeParent, isParent} : C
             <IconButton style={{float: "right"}} onClick={handleReactionsClick}>
               <AddReactionIcon fontSize="small"/>
             </IconButton>
+            {isParent && 
+              <IconButton style={{float: "right"}} onClick={(e) => exitCommentThread()}>
+                <KeyboardReturnIcon fontSize="small"/>
+              </IconButton>
+            }
             {!isParent && 
-            <IconButton style={{float: "right"}} onClick={(e) => changeParent(comment)}>
+            <IconButton style={{float: "right"}} onClick={(e) => enterCommentThread(comment)}>
                 <CommentIcon fontSize="small"/>
                 <div style={ {
                   position: "absolute",
                   right: 0,
-                  bottom: 0,
+                  bottom: "-3px",
                   fontSize: "50%", 
                 }}>
                   {comment.replies}
@@ -76,7 +83,7 @@ export function CommentBox({comment, update_comment, changeParent, isParent} : C
       >
         <ReactionContainer
           comment={comment}
-          update_comment={update_comment}
+          updateComment={updateComment}
         />
       </Popover>
     </div> 
