@@ -29,7 +29,7 @@ export function ReactionButton({
             </Icon>
             <div style={ {
                 position: "absolute",
-                right: 0,
+                right: "-3px",
                 bottom: 0,
                 fontSize: "50%", 
               }}>
