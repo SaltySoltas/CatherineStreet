@@ -20,6 +20,7 @@ export function ReactionButton({
     has_reacted,
     toggle
 }: ReactionButtonProps): JSX.Element {
+    console.log(reaction_id, openmoji.openmojis.length);
     const src = `/dist/openmoji/svg/${openmoji.openmojis[reaction_id].hexcode}.svg`
     console.log(src);
     const emojiIcon = (
@@ -29,11 +30,12 @@ export function ReactionButton({
             </Icon>
             <div style={ {
                 position: "absolute",
-                right: "-3px",
+                right: "-7px",
                 bottom: 0,
-                fontSize: "50%", 
+                fontSize: "65%", 
+                color: "black"
               }}>
-                {num_reacts}
+                <b>{num_reacts}</b>
              </div>
         </>
     );

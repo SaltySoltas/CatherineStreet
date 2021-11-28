@@ -27,7 +27,8 @@ export type User = {
 
 export type CommentThread = {
     parent: Comment | null;
-    replies: Comment[]
-    all_fetched: boolean
+    replies: Comment[];
+    all_fetched: boolean;
+    scroll_pos: number;
   }
   

@@ -84,17 +84,22 @@ export function CommentContainer({
   let comment_boxes = generateCommentBoxes(comments);
 
   return (
-    <div style={{
-      height: "430px",
-      width: "300px"
-    }}>
-
+    <div 
+      style={{
+        height: "430px",
+        width: "300px"
+      }}
+    >
       <Stack
+        onScroll={(e) => {
+          console.log((e.target as Element).scrollTop);
+        }}
         style={{
           width: "100%",
           maxWidth: "100%",
           maxHeight: "100%",
           overflow: "scroll",
+          paddingRight: "12px"
         }}
         spacing={2}
       >
@@ -108,7 +113,7 @@ export function CommentContainer({
               isParent
             />
             </div>
-            <Divider/>
+            <Divider sx={{ borderBottomWidth: 3, background: "black" }}/>
           </div>
         }
         {comment_boxes}

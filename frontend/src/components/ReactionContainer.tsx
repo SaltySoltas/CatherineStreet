@@ -49,15 +49,11 @@ export function ReactionContainer({ comment, updateComment }: ReactionContainerP
   }
 
   const reaction_toggler = (reaction_id: number): Function => () => {
-    console.log("clicked ", reaction_id, _copy(comment), hasReacted(reaction_id));
     if(hasReacted(reaction_id)){
-      console.log("Removing ", reaction_id);
       removeReaction(reaction_id);
     }else{
-      console.log("Adding ", reaction_id);
       addReaction(reaction_id);
     }
-    console.log(_copy(comment));
   }
 
 
@@ -75,23 +71,11 @@ export function ReactionContainer({ comment, updateComment }: ReactionContainerP
     ));
     rows.push((
       <div>
-        <Stack spacing={1} direction='row'>{row}</Stack>
+        <Stack spacing={2} direction='row'>{row}</Stack>
         <Divider/>
       </div>
     ));
   }
-
-
-  // let reaction_buttons = SupportedReactions.map((reaction_id, idx) => (
-  //   <div key={idx}>
-  //     <ReactionButton 
-  //       reaction_id={reaction_id} 
-  //       num_reacts={Object.keys(reactions[reaction_id] || {}).length} 
-  //       has_reacted={has_reacted(reaction_id)} 
-  //       toggle={reaction_toggler(reaction_id)}
-  //     />
-  //   </div>
-  // ));
 
   return (
     <div style={{

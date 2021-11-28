@@ -21,7 +21,8 @@ export function MainContainer({ site_url, user }: MainProps) {
   const [threads, setThreads] = useState([{
     parent: null,
     replies: [],
-    all_fetched: false
+    all_fetched: false,
+    scroll_pos: 0
   }] as CommentThread[]);
 
   const [cur_view, setView] = useState(Views.Comments);
@@ -45,7 +46,8 @@ export function MainContainer({ site_url, user }: MainProps) {
     let thread: CommentThread = {
       parent: parent,
       replies: [],
-      all_fetched: false
+      all_fetched: false,
+      scroll_pos: 0
     }
     let new_threads = [...threads, thread];
     setThreads(new_threads);
@@ -53,6 +55,13 @@ export function MainContainer({ site_url, user }: MainProps) {
 
   const exitCommentThread = () => {
     setThreads(threads.slice(0, -1));
+  }
+
+  const setScrollPos = (pos: number) => {
+    setCurThread({
+      ...threads.at(-1),
+      scroll_pos: pos
+    })
   }
 
   const setCurThread = (thread: CommentThread) => {
@@ -86,7 +95,8 @@ export function MainContainer({ site_url, user }: MainProps) {
       setCurThread({
         parent: cur_parent,
         replies: new_comments,
-        all_fetched: (comments.length < PAGE_LENGTH)
+        all_fetched: (comments.length < PAGE_LENGTH),
+        scroll_pos: 0
       });
 
     })
@@ -95,6 +105,8 @@ export function MainContainer({ site_url, user }: MainProps) {
       setView(Views.Error);
     });
   }
+
+  console.log(threads);
 
   return (
     <div style={{height: "550px"}}>
