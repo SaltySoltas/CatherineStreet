@@ -70,6 +70,16 @@ export function MainContainer({ site_url, user }: MainProps) {
     setThreads(new_threads)
   }
 
+  const addComment = (new_comment: Comment) => {
+    if(!!cur_parent){
+      cur_parent.replies += 1;
+    }
+    updateCommentList([
+      ...comment_list,
+      new_comment
+    ]);
+  }
+
   const updateCommentList = (new_comments: Comment[], all_fetched?: boolean) => {
     let new_threads = [...threads]
     new_threads.at(-1).replies = new_comments;
@@ -128,7 +138,7 @@ export function MainContainer({ site_url, user }: MainProps) {
         site_url={site_url} 
         user={user} 
         cur_comments={comment_list} 
-        add_comment={updateCommentList}
+        addComment={addComment}
         cur_parent={cur_parent}
       />
       </Stack>

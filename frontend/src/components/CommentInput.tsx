@@ -7,12 +7,12 @@ interface CommentInputProps {
     site_url: string;
     user: User;
     cur_comments: Comment[];
-    add_comment : Function;
+    addComment : Function;
     cur_parent: Comment;
 };
 
 
-export function CommentInput({site_url, user, cur_comments, add_comment, cur_parent} : CommentInputProps) : JSX.Element {
+export function CommentInput({site_url, user, cur_comments, addComment: add_comment, cur_parent} : CommentInputProps) : JSX.Element {
 
     const requestOptions = (site_url : string, content:string, parent_id?:number ) => {
         console.log(content);
@@ -41,20 +41,14 @@ export function CommentInput({site_url, user, cur_comments, add_comment, cur_par
            return res.json();
         })
         .then(res => {
-            console.log(res);
-            console.log(`Submitting comment = ${comment_body}`);
-            console.log(`current list =  ${cur_comments}`);
-            const new_comment_list =  [
-                {
-                    comment_text: comment_body, 
-                    first_name: user.first_name,
-                    comment_id: res.comment_id,
-                    last_name: user.last_name, 
-                    reactions: {}
-                }, 
-                 ...cur_comments];
-            setContent('');
-            add_comment(new_comment_list);
+            add_comment( {
+                comment_text: comment_body, 
+                first_name: user.first_name,
+                comment_id: res.comment_id,
+                last_name: user.last_name, 
+                reactions: {},
+                replies: 0
+            });
         })
         .catch(err => {
             alert(err);

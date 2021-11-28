@@ -21,7 +21,7 @@ export function ReactionButton({
     toggle
 }: ReactionButtonProps): JSX.Element {
     console.log(reaction_id, openmoji.openmojis.length);
-    const src = `/dist/openmoji/svg/${openmoji.openmojis[reaction_id].hexcode}.svg`
+    const src = `/dist/openmoji/${openmoji.openmojis[reaction_id].hexcode}.svg`
     console.log(src);
     const emojiIcon = (
         <>
