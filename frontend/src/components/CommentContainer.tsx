@@ -12,6 +12,7 @@ interface CommentContainerProps {
   allCommentsFetched: boolean;
   enterCommentThread: (c: Comment) => void;
   exitCommentThread: () => void;
+  setScrollPos: (n: number) => void;
 }
 
 export function CommentContainer({
@@ -22,7 +23,8 @@ export function CommentContainer({
   allCommentsFetched, 
   cur_parent, 
   enterCommentThread, 
-  exitCommentThread} : CommentContainerProps) : JSX.Element {
+  exitCommentThread,
+  setScrollPos} : CommentContainerProps) : JSX.Element {
 
 
   const [prevY, changePrevY] = useState(0);
@@ -37,7 +39,6 @@ export function CommentContainer({
   }
 
   useEffect(() => {
-    console.log(`prevY = ${prevY}, curY = ${curY}`);
     if (prevY > curY) {
       fetchNextCommentPage();
     }
@@ -91,8 +92,9 @@ export function CommentContainer({
       }}
     >
       <Stack
+        id="comments_scrollable_container"
         onScroll={(e) => {
-          console.log((e.target as Element).scrollTop);
+          setScrollPos((e.target as Element).scrollTop);
         }}
         style={{
           width: "100%",

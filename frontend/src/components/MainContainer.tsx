@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { SortType, Comment, User, CommentThread } from "../constants/types";
 import { CommentInput } from "./CommentInput";
 import { SortBar } from "./SortBar";
@@ -28,9 +28,19 @@ export function MainContainer({ site_url, user }: MainProps) {
   const [cur_view, setView] = useState(Views.Comments);
   const [sort_type, setSortType] = useState(SortType.Chronological);
 
+  const prev_threads_length = usePrevious(threads.length);
+
   const cur_parent = threads.at(-1).parent;
   const comment_list = threads.at(-1).replies;
   const all_fetched = threads.at(-1).all_fetched;
+
+  function usePrevious(value: any) {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+    }, [value]);
+    return ref.current;
+  }
 
   useEffect(() => {
     fetchNextCommentPage();
@@ -41,6 +51,15 @@ export function MainContainer({ site_url, user }: MainProps) {
       fetchNextCommentPage([]);
     }
   }, [cur_parent]);
+
+  useEffect(() => {
+    if(threads.length === (prev_threads_length || 1) - 1){
+      let scroll_container = document.getElementById("comments_scrollable_container");
+      if(!!scroll_container){
+        scroll_container.scrollTop = threads.at(-1).scroll_pos;
+      }
+    }
+  }, [threads])
 
   const enterCommentThread = (parent: Comment) => {
     let thread: CommentThread = {
@@ -132,6 +151,7 @@ export function MainContainer({ site_url, user }: MainProps) {
         enterCommentThread={enterCommentThread}
         exitCommentThread={exitCommentThread}
         cur_parent={cur_parent}
+        setScrollPos={setScrollPos}
       />}
       {cur_view === Views.Error && <div> ERROR: Failed to fetch comments </div>}
       <CommentInput

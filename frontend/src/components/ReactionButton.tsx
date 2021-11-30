@@ -20,9 +20,7 @@ export function ReactionButton({
     has_reacted,
     toggle
 }: ReactionButtonProps): JSX.Element {
-    console.log(reaction_id, openmoji.openmojis.length);
     const src = `/dist/openmoji/${openmoji.openmojis[reaction_id].hexcode}.svg`
-    console.log(src);
     const emojiIcon = (
         <>
             <Icon style={{transform: "scale(1.43)"}}>
