@@ -1,27 +1,22 @@
 import mysql from 'mysql';
+require('dotenv').config();
 
 class mysql_db {
 
-    connection: mysql.Connection;
+    private static connectionOptions = {
+        connectionLimit : 151,
+        host: process.env.MYSQL_HOST,
+        user: process.env.MYSQL_USER,
+        password: process.env.MYSQL_PASSWORD,
+        database: process.env.MYSQL_DB,
+        socketPath: process.env.MYSQL_SOCKET_PATH
+    };
+    private static pool = mysql.createPool(this.connectionOptions);
 
-    public constructor(){
-        this.connection = mysql.createConnection({
-            host: process.env.MYSQL_HOST,
-            user: process.env.MYSQL_USER,
-            password: process.env.MYSQL_PASSWORD,
-            database: process.env.MYSQL_DB,
-            port: 3307
-        });
-        this.connection.connect(err => {
-            if(err) {
-                console.error(err);
-            }
-        });
-    }
 
     // For querying the db within a promise, handles rejecting with errors automatically
-    public pquery(query: string, fail_cb: any, cb: any){
-        this.connection.query(query, (err, result) => {
+    public static pquery(query: string, fail_cb: any, cb: any){
+        this.pool.query(query, (err, result) => {
             if(err){
                 fail_cb(err);
             }else{

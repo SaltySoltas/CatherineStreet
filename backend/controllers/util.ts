@@ -16,7 +16,6 @@ function parse_path_ints(req: express.Request){
 function parse_query_ints(req: express.Request){
     let ret: any = {}
     for(let key in req.query){
-        console.log(key, req.query, req.query[key]);
         let v = parseInt(req.query[key] as string);
         if(!isNaN(v)){
             ret[key] = v;

@@ -2,8 +2,6 @@ export const BASE_PATH = "http://localhost:8080";
 
 export const PAGE_COMMENTS_PATH = BASE_PATH + "/api/";
 
-
-
 export enum SortType {
     Chronological = 1,
     MostUpvotes,

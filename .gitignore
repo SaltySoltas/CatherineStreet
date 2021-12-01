@@ -4,3 +4,4 @@ dist/
 .env
 .DS_Store
 .nyc_output/
+yarn-error.log
