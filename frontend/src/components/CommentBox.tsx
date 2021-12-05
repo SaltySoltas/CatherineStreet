@@ -73,7 +73,7 @@ export function CommentBox({comment, updateComment, isParent, enterCommentThread
     const id = open ? 'simple-popover' : undefined;
 
     let top_reactions: JSX.Element[] = [];
-    const maxHeap = new Heap(Heap.maxComparator);
+    const maxHeap = new Heap(Heap.minComparator);
     maxHeap.init([]);
     for(let reaction_id in comment.reactions){
       let count = Object.keys(comment.reactions[reaction_id]).length;

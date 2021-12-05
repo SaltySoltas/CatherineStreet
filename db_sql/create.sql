@@ -38,9 +38,11 @@ CREATE TABLE IF NOT EXISTS `comments` (
 
 \! echo "Creating reactions table..."
 CREATE TABLE IF NOT EXISTS `reactions` (
+    id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
     comment_id bigint(20) unsigned NOT NULL,
     reaction_id int,
     user_id bigint(20) unsigned NOT NULL,
+    PRIMARY KEY (id),
     FOREIGN KEY (comment_id) REFERENCES comments(comment_id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );

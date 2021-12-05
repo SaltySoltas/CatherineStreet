@@ -1,8 +1,7 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react';
-import { JsonObjectExpression } from 'typescript';
+import React, { ChangeEvent } from 'react';
 import { SortType } from '../constants/types';
 import {convertStrToSortType} from '../constants/constants';
-import { FormControl, Select, MenuItem, InputLabel, NativeSelect} from '@mui/material';
+import { FormControl, Select, MenuItem, InputLabel } from '@mui/material';
 
 
 interface SortBarProps {
@@ -24,11 +23,9 @@ export function SortBar({cur_sort_type, set_sort_type} : SortBarProps) : JSX.Ele
     //Profile ID, 
 
     const sortTypeOnChange = (e: ChangeEvent<HTMLInputElement>) => {
-        console.log("new sort type: ", e.target.value);
-        set_sort_type(convertStrToSortType(e.target.value));
+        console.log("new sort type: ", e.target.value, typeof e.target.value);
+        set_sort_type(parseInt(e.target.value));
     }
-
-    
     
     return (
         <div id="SortBar">
@@ -39,11 +36,14 @@ export function SortBar({cur_sort_type, set_sort_type} : SortBarProps) : JSX.Ele
                 value={cur_sort_type}
                 label="Sort By"
                 onChange={sortTypeOnChange}
-            >s
-                <MenuItem value={SortType.Chronological}>Chronological</MenuItem>
-                <MenuItem value={SortType.MostUpvotes}>Most Upvotes</MenuItem>
-                <MenuItem value={SortType.MostReactions}>Most Reactions</MenuItem>
-                <MenuItem value={SortType.MyComments}>My Comments</MenuItem>
+            >
+                {Object.keys(SortType)
+                    .filter(x => !isNaN(Number(x)))
+                    .map(n => Number(n))
+                    .map((n: number) => (
+                        <MenuItem value={n}>{SortType[n].split(/(?=[A-Z])/).join(' ')}</MenuItem>
+                    ))
+                }
             </Select>
             </FormControl>
         </div>

@@ -1,8 +1,7 @@
 export enum SortType {
-    Chronological = 1,
-    MostUpvotes,
+    Hot = 1,
     MostReactions,
-    MyComments,
+    New
 }
 
 export type Comment = {

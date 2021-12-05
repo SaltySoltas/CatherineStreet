@@ -35,6 +35,7 @@ export function CommentContainer({
 
   const  handleObserver = (entities: any, _: any) => {
     const y = entities[0].boundingClientRect.y;
+    console.log(`observed ${y}`);
     changeCurY(y);
   }
 

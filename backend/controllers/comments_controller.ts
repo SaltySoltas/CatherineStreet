@@ -53,7 +53,7 @@ export default {
 
     get_comments (req: express.Request, res: express.Response) {
         let url = req.query['url'] as string;
-        let {parent_id, start, limit} = util.parse_query_ints(req);
+        let {parent_id, start, limit, sort_type} = util.parse_query_ints(req);
 
         if(util.is_undefined(req.query['parent_id'])) parent_id = null;
 
@@ -62,7 +62,7 @@ export default {
         util.api_precondition_is_defined(limit, "Could not parse limit int");
         util.api_precondition_is_defined(parent_id, "Could not parse parent_id int");
 
-        comments_service.get_comments(url, parent_id, start, limit)
+        comments_service.get_comments(url, parent_id, start, limit, sort_type)
         .then(result => {
             res.status(200).send(result);
         })

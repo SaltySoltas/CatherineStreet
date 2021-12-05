@@ -1,14 +1,14 @@
-
 export interface Comment {
     comment_id: number;
     comment_text: string;
-    created_at: object;
+    created_at: Date;
     user_id: number;
     first_name: string;
     last_name: string;
     website_id: number;
     parent_id: number | null;
     replies: number;
+    num_reactions: number;
     reactions: {
         [key: number]: {
             [key: number]: User
@@ -31,3 +31,8 @@ export interface User{
     last_name: string;
 }
 
+export enum SortType {
+    Hot = 1,
+    MostReactions,
+    New
+}
