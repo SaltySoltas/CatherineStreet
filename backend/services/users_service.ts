@@ -33,7 +33,7 @@ import users_sql from '../sql/users_sql';
         return new Promise((resolve, reject) => {
             let db = new mysql_db();
             let query = users_sql.create_session(user_id, session_token);
-            db.pquery(query, reject, (result: any) => {
+            mysql_db.pquery(query, reject, (result: any) => {
                     resolve(result);
             });
         });
@@ -43,7 +43,7 @@ import users_sql from '../sql/users_sql';
         return new Promise((resolve, reject) => {
             let db = new mysql_db();
             let query = users_sql.validate_session(session_token);
-            db.pquery(query, reject, (result: any) => {
+            mysql_db.pquery(query, reject, (result: any) => {
                 resolve(result["user_id"] == user_id);
             });
         });
