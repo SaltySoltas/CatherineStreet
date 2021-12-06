@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Stack, Avatar, Popover, IconButton, Grid, Typography, useTheme } from '@mui/material';
-import {deepOrange} from '@mui/material/colors';
+import * as mui_colors from '@mui/material/colors';
 import {ReactionContainer} from './ReactionContainer';
 import { Comment } from '../constants/types';
 import AddReactionIcon from '@mui/icons-material/AddReaction';
@@ -10,6 +10,23 @@ import Heap from 'heap-js';
 import { ReactionButton } from './ReactionButton';
 import { UserContext} from '../UserContext';
 import {TOGGLE_REACTION_URL} from '../constants/url_paths';
+
+const {deepOrange} = mui_colors;
+for(let color in mui_colors){
+  console.log(color);
+}
+console.log(mui_colors, mui_colors['deepOrange']);
+
+let colors: string[] = [];
+for(let k of Object.keys(mui_colors)){
+  let color = (mui_colors as any)[k][500];
+  if(!!color){
+    colors.push(color);
+  }
+}
+
+const hashCode = (s: string) => s.split('').reduce((a,b)=>{a=((a<<5)-a)+b.charCodeAt(0);return a&a},0)
+
 
 interface CommentProps {
     comment: Comment;
@@ -73,7 +90,7 @@ export function CommentBox({comment, updateComment, isParent, enterCommentThread
     const id = open ? 'simple-popover' : undefined;
 
     let top_reactions: JSX.Element[] = [];
-    const maxHeap = new Heap(Heap.maxComparator);
+    const maxHeap = new Heap(Heap.minComparator);
     maxHeap.init([]);
     for(let reaction_id in comment.reactions){
       let count = Object.keys(comment.reactions[reaction_id]).length;
@@ -99,6 +116,8 @@ export function CommentBox({comment, updateComment, isParent, enterCommentThread
       ))
     }
 
+    const avatarColor = colors[hashCode(comment.first_name + comment.last_name) % colors.length];
+
     return (     
       <div style={{
         background: theme.palette.background.paper,
@@ -106,7 +125,7 @@ export function CommentBox({comment, updateComment, isParent, enterCommentThread
       }}>
       <Grid container wrap="nowrap" spacing={2}>
         <Grid item>
-          <Avatar sx={{ bgcolor: deepOrange[500] }}>{comment.first_name[0].toUpperCase()}</Avatar>
+          <Avatar sx={{ bgcolor: avatarColor }}>{comment.first_name[0].toUpperCase()}{comment.last_name[0].toUpperCase()}</Avatar>
         </Grid>
         <Grid justifyContent="left" item xs={8} zeroMinWidth>
           <h4 style={{ margin: 0, textAlign: "left" }}>{comment.first_name} {comment.last_name}</h4>

@@ -8,11 +8,12 @@ export const COMMENTS_BASE_URL = uj(API_BASE_URL, 'comments');
 
 export const COMMENTS_CREATE_URL = COMMENTS_BASE_URL;
 
-export const COMMENTS_GET_URL = (url: string, start: number, limit: number, parent_id: number | null | undefined) => {
+export const COMMENTS_GET_URL = (url: string, start: number, limit: number, parent_id: number | null | undefined, sort_type: number) => {
     let ret = new URL(COMMENTS_BASE_URL);
     ret.searchParams.append("url", encodeURI(url));
     ret.searchParams.append("start", start.toString());
     ret.searchParams.append("limit", limit.toString());
+    ret.searchParams.append("sort_type", sort_type.toString());
     if(typeof parent_id === 'number'){
         ret.searchParams.append("parent_id", parent_id.toString());
     }

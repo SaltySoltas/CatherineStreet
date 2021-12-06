@@ -1,8 +1,7 @@
 export enum SortType {
-    Chronological = 1,
-    MostUpvotes,
+    Hot = 1,
     MostReactions,
-    MyComments,
+    New
 }
 
 export type Comment = {
@@ -30,5 +29,6 @@ export type CommentThread = {
     replies: Comment[];
     all_fetched: boolean;
     scroll_pos: number;
+    sort_by: SortType;
   }
   

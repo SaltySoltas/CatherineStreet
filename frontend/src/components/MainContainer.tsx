@@ -6,6 +6,7 @@ import { CommentContainer } from "./CommentContainer";
 import { COMMENTS_GET_URL } from '../constants/url_paths';
 import { Stack } from "@mui/material";
 import { PAGE_LENGTH } from "../constants/constants";
+import onUpdate, { usePrevious } from "../util";
 
 interface MainProps {
   site_url: string;
@@ -22,51 +23,62 @@ export function MainContainer({ site_url, user }: MainProps) {
     parent: null,
     replies: [],
     all_fetched: false,
-    scroll_pos: 0
-  }] as CommentThread[]);
+    scroll_pos: 0,
+    sort_by: SortType.Hot
+  } as CommentThread] as CommentThread[]);
 
   const [cur_view, setView] = useState(Views.Comments);
-  const [sort_type, setSortType] = useState(SortType.Chronological);
+
+  const is_fetching = useRef(false);
+
+  const cur_thread = threads.at(-1);
+  const {
+    parent: cur_parent, 
+    replies: comment_list, 
+    all_fetched, 
+    sort_by: sort_type} = cur_thread;
 
   const prev_threads_length = usePrevious(threads.length);
-
-  const cur_parent = threads.at(-1).parent;
-  const comment_list = threads.at(-1).replies;
-  const all_fetched = threads.at(-1).all_fetched;
-
-  function usePrevious(value: any) {
-    const ref = useRef();
-    useEffect(() => {
-      ref.current = value;
-    }, [value]);
-    return ref.current;
-  }
+  const prev_sort_type = usePrevious(sort_type);
 
   useEffect(() => {
     fetchNextCommentPage();
   }, []);
 
   useEffect(() => {
-    if(threads.at(-1).replies.length === 0){
-      fetchNextCommentPage([]);
-    }
-  }, [cur_parent]);
-
-  useEffect(() => {
+    // On thread exit
     if(threads.length === (prev_threads_length || 1) - 1){
-      let scroll_container = document.getElementById("comments_scrollable_container");
-      if(!!scroll_container){
-        scroll_container.scrollTop = threads.at(-1).scroll_pos;
-      }
+      resetContainerScroll();
     }
-  }, [threads])
+
+    // On thread enter
+    if(threads.length === (prev_threads_length || 1) + 1){
+      fetchNextCommentPage();
+    }
+
+    if(prev_sort_type !== sort_type){
+      setContainerScroll(0);
+    }
+  }, [threads]);
+
+  onUpdate(() => {
+    refreshComments(0, comment_list.length)
+  }, [sort_type]);
+
+  const setSortType = (st: SortType) => {
+    setCurThread({
+      ...cur_thread,
+      sort_by: st
+    });
+  }
 
   const enterCommentThread = (parent: Comment) => {
     let thread: CommentThread = {
       parent: parent,
       replies: [],
       all_fetched: false,
-      scroll_pos: 0
+      scroll_pos: 0,
+      sort_by: cur_thread.sort_by
     }
     let new_threads = [...threads, thread];
     setThreads(new_threads);
@@ -78,9 +90,20 @@ export function MainContainer({ site_url, user }: MainProps) {
 
   const setScrollPos = (pos: number) => {
     setCurThread({
-      ...threads.at(-1),
+      ...cur_thread,
       scroll_pos: pos
     })
+  }
+
+  const resetContainerScroll = () => {
+    setContainerScroll(cur_thread.scroll_pos);
+  }
+
+  const setContainerScroll = (pos: number) => {
+    let scroll_container = document.getElementById("comments_scrollable_container");
+    if(!!scroll_container){
+      scroll_container.scrollTop = pos;
+    }
   }
 
   const setCurThread = (thread: CommentThread) => {
@@ -114,25 +137,48 @@ export function MainContainer({ site_url, user }: MainProps) {
     setThreads(new_threads);
   }
 
-  const fetchNextCommentPage = (prev_comments = comment_list) => {
-    console.log("Fetching next page!");
-    let url = COMMENTS_GET_URL(site_url, prev_comments.length, PAGE_LENGTH, cur_parent?.comment_id);
-    fetch(url)
+  const fetchComments = (start: number, limit: number, parent: number | null) =>{
+    console.log("fetching");
+    let url = COMMENTS_GET_URL(site_url, start, limit, parent, sort_type);
+    return fetch(url)
     .then((res: Response) => res.json())
+    .catch(_ => setView(Views.Error));
+  }
+
+  const refreshComments = (start: number, limit: number) => {
+    console.log(`refreshing ${start}, ${limit}`);
+    fetchComments(start, limit, cur_parent?.comment_id)
     .then((comments: Comment[]) => {
-      let new_comments = [...prev_comments, ...comments];
       setCurThread({
-        parent: cur_parent,
-        replies: new_comments,
-        all_fetched: (comments.length < PAGE_LENGTH),
+        ...cur_thread,
+        replies: comments,
         scroll_pos: 0
       });
-
     })
-    .catch(err => {
-      console.error(err);
-      setView(Views.Error);
-    });
+    .catch(_ => setView(Views.Error));
+  }
+
+  const fetchNextCommentPage = (prev_comments = comment_list) => {
+    // This is not a race condition even though it looks like one
+    // JS engine does not interleave execution of functions
+    if(!is_fetching.current){
+      is_fetching.current = true;
+      fetchComments(prev_comments.length, PAGE_LENGTH, cur_parent?.comment_id)
+      .then((comments: Comment[]) => {
+        console.log(`fetched`);
+        let new_comments = [...prev_comments, ...comments];
+        setCurThread({
+          ...cur_thread,
+          replies: new_comments,
+          all_fetched: (comments.length < PAGE_LENGTH)
+        });
+
+      })
+      .catch(_ => setView(Views.Error))
+      .finally(() => {
+        is_fetching.current = false;
+      });
+    }
   }
 
   console.log(threads);

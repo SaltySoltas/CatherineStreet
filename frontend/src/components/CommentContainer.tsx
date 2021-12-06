@@ -26,38 +26,28 @@ export function CommentContainer({
   exitCommentThread,
   setScrollPos} : CommentContainerProps) : JSX.Element {
 
-
-  const [prevY, changePrevY] = useState(0);
-  const [curY, changeCurY] = useState(0);
-
-  var loadingRef: any = null;
-  var observer: any = null;
-
-  const  handleObserver = (entities: any, _: any) => {
-    const y = entities[0].boundingClientRect.y;
-    changeCurY(y);
-  }
-
-  useEffect(() => {
-    if (prevY > curY) {
+  const handleObserver = (e: any) =>{
+    console.log(e);
+    if(e[0].isIntersecting){
       fetchNextCommentPage();
     }
-    changePrevY(curY);
-  }, [curY]);
+  }
+
+  var loadingRef: any = null;
+  var observer: any = new IntersectionObserver(
+    handleObserver,
+    {
+      root: null,
+      rootMargin: "0px",
+      threshold: 1.0
+    }
+  );
 
   useEffect(() => {
     if(!!loadingRef){
-      observer = new IntersectionObserver(
-        handleObserver,
-        {
-          root: null,
-          rootMargin: "0px",
-          threshold: 1.0
-        }
-      );
       observer.observe(loadingRef);
     }
-  }, [cur_parent]);
+  });
 
   const comment_updater = (i: number) => {
     return (new_comment: Comment) => {
