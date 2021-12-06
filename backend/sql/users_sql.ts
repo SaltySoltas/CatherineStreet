@@ -11,7 +11,7 @@ export default {
     },
 
     create_session(uid: number, token: string) {
-        return `INSERT INTO \`session\` (user_id, session_id) VALUES (${mysql.escape(uid)}, ${mysql.escape(token)})`
+        return `INSERT INTO \`sessions\` (user_id, session_id) VALUES (${mysql.escape(uid)}, ${mysql.escape(token)})`
     },
 
     validate_session(token: string){
