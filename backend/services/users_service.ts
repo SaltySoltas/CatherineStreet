@@ -52,5 +52,7 @@ import users_sql from '../sql/users_sql';
 export default {
     get_user_by_id,
     create_new_user,
-    get_user_by_google_id
+    get_user_by_google_id,
+    create_or_update_session,
+    validate_session
 }

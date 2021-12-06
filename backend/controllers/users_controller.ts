@@ -52,11 +52,16 @@ export default {
         })
     },
 
-    auth (req: express.Request, res: express.Response) {
-        //go through auth
-
+    create_session (req: express.Request, res: express.Response) {
+        let {user_id} = util.parse_path_ints(req);
         //return session if successful
-        var session = req.session;
-        res.status(200).send();
+        var session_id = req.session.id;
+        users_service.create_or_update_session(user_id, session_id).then(() => {
+            res.status(200).send();
+        })
+        .catch((err: any) => {
+            res.status(400).send(err);
+        })
+        
     }
 }

@@ -1,3 +1,4 @@
+import users_service from '../services/users_service';
 import express from 'express';
 import login_service from '../services/login_service';
 import util from './util';
@@ -11,9 +12,11 @@ export default {
 
         login_service.do_google_auth(token)
         .then(user => {
-            res.status(200).send({
-                user: user
-            });
+            users_service.create_or_update_session(user as number, req.session.id).then(() => {
+                res.status(200).send({
+                    user: user
+                });
+            })
         })
         .catch(err => {
             res.status(400).send(err);
