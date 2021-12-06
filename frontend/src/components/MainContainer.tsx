@@ -23,35 +23,41 @@ export function MainContainer({ site_url, user }: MainProps) {
     parent: null,
     replies: [],
     all_fetched: false,
-    scroll_pos: 0
-  }] as CommentThread[]);
+    scroll_pos: 0,
+    sort_by: SortType.Hot
+  } as CommentThread] as CommentThread[]);
 
   const [cur_view, setView] = useState(Views.Comments);
-  const [sort_type, setSortType] = useState(SortType.Hot);
-
-  const prev_threads_length = usePrevious(threads.length);
 
   const is_fetching = useRef(false);
 
   const cur_thread = threads.at(-1);
-  const cur_parent = cur_thread.parent;
-  const comment_list = cur_thread.replies;
-  const all_fetched = cur_thread.all_fetched;
+  const {
+    parent: cur_parent, 
+    replies: comment_list, 
+    all_fetched, 
+    sort_by: sort_type} = cur_thread;
+
+  const prev_threads_length = usePrevious(threads.length);
+  const prev_sort_type = usePrevious(sort_type);
 
   useEffect(() => {
     fetchNextCommentPage();
   }, []);
 
   useEffect(() => {
-    if(threads.at(-1).replies.length === 0){
-      fetchNextCommentPage([]);
-    }
-  }, [cur_parent]);
-
-  useEffect(() => {
     // On thread exit
     if(threads.length === (prev_threads_length || 1) - 1){
       resetContainerScroll();
+    }
+
+    // On thread enter
+    if(threads.length === (prev_threads_length || 1) + 1){
+      fetchNextCommentPage();
+    }
+
+    if(prev_sort_type !== sort_type){
+      setContainerScroll(0);
     }
   }, [threads]);
 
@@ -59,12 +65,20 @@ export function MainContainer({ site_url, user }: MainProps) {
     refreshComments(0, comment_list.length)
   }, [sort_type]);
 
+  const setSortType = (st: SortType) => {
+    setCurThread({
+      ...cur_thread,
+      sort_by: st
+    });
+  }
+
   const enterCommentThread = (parent: Comment) => {
     let thread: CommentThread = {
       parent: parent,
       replies: [],
       all_fetched: false,
-      scroll_pos: 0
+      scroll_pos: 0,
+      sort_by: cur_thread.sort_by
     }
     let new_threads = [...threads, thread];
     setThreads(new_threads);
@@ -76,15 +90,19 @@ export function MainContainer({ site_url, user }: MainProps) {
 
   const setScrollPos = (pos: number) => {
     setCurThread({
-      ...threads.at(-1),
+      ...cur_thread,
       scroll_pos: pos
     })
   }
 
   const resetContainerScroll = () => {
+    setContainerScroll(cur_thread.scroll_pos);
+  }
+
+  const setContainerScroll = (pos: number) => {
     let scroll_container = document.getElementById("comments_scrollable_container");
     if(!!scroll_container){
-      scroll_container.scrollTop = cur_thread.scroll_pos;
+      scroll_container.scrollTop = pos;
     }
   }
 
@@ -150,10 +168,9 @@ export function MainContainer({ site_url, user }: MainProps) {
         console.log(`fetched`);
         let new_comments = [...prev_comments, ...comments];
         setCurThread({
-          parent: cur_parent,
+          ...cur_thread,
           replies: new_comments,
-          all_fetched: (comments.length < PAGE_LENGTH),
-          scroll_pos: 0
+          all_fetched: (comments.length < PAGE_LENGTH)
         });
 
       })

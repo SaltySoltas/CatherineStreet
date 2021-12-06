@@ -29,5 +29,6 @@ export type CommentThread = {
     replies: Comment[];
     all_fetched: boolean;
     scroll_pos: number;
+    sort_by: SortType;
   }
   
