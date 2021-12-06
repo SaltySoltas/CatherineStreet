@@ -11,3 +11,11 @@ export default function onUpdate(cb: () => void, deps: any[]){
         }
     }, deps);
 }
+
+export function usePrevious(value: any) {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+    }, [value]);
+    return ref.current;
+  }

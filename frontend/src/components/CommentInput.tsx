@@ -49,6 +49,7 @@ export function CommentInput({site_url, user, cur_comments, addComment: add_comm
                 reactions: {},
                 replies: 0
             });
+            setContent("");
         })
         .catch(err => {
             alert(err);
@@ -68,9 +69,23 @@ export function CommentInput({site_url, user, cur_comments, addComment: add_comm
 
                 <TextField id="comment-input-text" label="Add a comment" variant="outlined"
                 value={comment_body}
-                onChange={contentDidChange} />
+                onChange={contentDidChange} 
+                onKeyDown={(e) => {
+                    console.log(e);
+                        if((e.metaKey || e.ctrlKey) && e.key === "Enter" && !!comment_body){
+                            SubmitComment();
+                        }
+                    }
+                }
+                />
 
-                <Button variant="contained" disabled={comment_body===''} onClick={SubmitComment}>Submit</Button>
+                <Button 
+                variant="contained" 
+                disabled={comment_body===''} 
+                onClick={SubmitComment}
+                >
+                    Submit
+                </Button>
 
             </Stack>
 
