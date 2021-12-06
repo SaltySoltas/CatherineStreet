@@ -16,5 +16,7 @@ users_router.get('/google/:google_id', users_controller.get_user_by_google_id);
 // Create new user, respond with new user id
 users_router.post('/create', users_controller.create_new_user);
 
+users_router.post('/session/:user_id', users_controller.create_session)
+
 // module.exports = users_router;
 export default users_router;

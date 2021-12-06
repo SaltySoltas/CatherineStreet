@@ -1,9 +1,12 @@
 import express from 'express';
+import session, { SessionData } from 'express-session';
 import users_service from '../services/users_service';
 import util from './util';
 
-
 export default {
+
+    
+
     get_user_by_id (req: express.Request, res: express.Response) {
         let {user_id} = util.parse_path_ints(req);
 
@@ -47,5 +50,18 @@ export default {
         .catch((err: any) => {
             res.status(400).send(err);
         })
+    },
+
+    create_session (req: express.Request, res: express.Response) {
+        let {user_id} = util.parse_path_ints(req);
+        //return session if successful
+        var session_id = req.session.id;
+        users_service.create_or_update_session(user_id, session_id).then(() => {
+            res.status(200).send();
+        })
+        .catch((err: any) => {
+            res.status(400).send(err);
+        })
+        
     }
 }

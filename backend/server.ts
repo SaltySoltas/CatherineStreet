@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 import path from 'path';
 import winston from 'winston';
 import expressWinston from 'express-winston';
-
 import main_router from './routers/main_router';
 import errors_middleware from './errors/errors_middleware';
 
@@ -12,6 +11,11 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 8080;
 const INDEX_PATH = path.join(__dirname, "..", "frontend", "dist");
+const SESSION_SECRET = process.env.SESSION_KEY || "catherinestreetsecret";
+const oneWeek = 604800000;
+
+const sessions = require('express-session');
+const cookieParser = require('cookie-parser');
 
 app.use(express.json());
 
@@ -31,6 +35,15 @@ app.use(expressWinston.logger({
   }));
 
 app.use(express.static(INDEX_PATH));
+
+app.use(sessions({
+    secret: SESSION_SECRET,
+    saveUnitialized: true,
+    cookie: {maxAge: oneWeek},
+    resave: false
+}));
+
+app.use(cookieParser());
 
 app.use('/api', main_router);
 

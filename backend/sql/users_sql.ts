@@ -10,6 +10,14 @@ export default {
         return `SELECT * FROM \`users\` WHERE user_id=${mysql.escape(id)}`
     },
 
+    create_session(uid: number, token: string) {
+        return `INSERT INTO \`sessions\` (user_id, session_id) VALUES (${mysql.escape(uid)}, ${mysql.escape(token)})`
+    },
+
+    validate_session(token: string){
+        return `SELECT user_id FROM \`sessions\` WHERE session_id=${mysql.escape(token)}`
+    },
+
     get_user_by_google_id (google_id: string) {
         return `SELECT * FROM \`users\` WHERE google_id=${mysql.escape(google_id)}`
     }
