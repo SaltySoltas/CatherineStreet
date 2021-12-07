@@ -15,7 +15,8 @@
     "host_permissions": [
       "https://localhost:8080/api/*",
       "http://localhost:8080/api/*",
-      "https://site-talk.herokuapp.com/*"
+      "https://site-talk.herokuapp.com/*",
+      "http://site-talk.herokuapp.com/*"
       
     ],
     "oauth2": {

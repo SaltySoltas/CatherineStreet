@@ -1,6 +1,6 @@
 import uj from 'url-join';
 
-export const URL_BASE = `http://${process.env.APP_DOMAIN}:${process.env.PORT}`
+export const URL_BASE = `http://${process.env.APP_DOMAIN}${process.env.PORT}`
 
 export const API_BASE_URL = uj(URL_BASE, '/api');
 
