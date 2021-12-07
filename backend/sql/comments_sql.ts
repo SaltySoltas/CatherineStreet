@@ -1,5 +1,4 @@
 import mysql from 'mysql';
-import {SortType} from '../types';
 
 export default {
     create_comment (user_id: number, website_id: number, text: string, parent_id: number | null): string {
@@ -15,7 +14,8 @@ export default {
             parent_sql = `=${mysql.escape(parent_id)}`;
         }
 
-        return `SELECT comments.*, users.first_name, users.last_name, count(distinct children.comment_id) as replies, count(distinct reactions.id) as num_reactions
+        return `SELECT comments.*, users.first_name, users.last_name, 
+                count(distinct children.comment_id) as replies, count(distinct reactions.id) as num_reactions
                     FROM \`comments\`
                     JOIN \`users\`
                         ON users.user_id = comments.user_id
@@ -29,7 +29,8 @@ export default {
     },
 
     get_comment_by_id(comment_id: number){
-        return `SELECT comments.*, users.first_name, users.last_name, count(distinct children.comment_id) as replies, count(distinct reactions.id) as num_reactions
+        return `SELECT comments.*, users.first_name, users.last_name, 
+                count(distinct children.comment_id) as replies, count(distinct reactions.id) as num_reactions
                     FROM \`comments\`
                     JOIN \`users\`
                         ON users.user_id = comments.user_id

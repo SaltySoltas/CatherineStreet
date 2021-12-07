@@ -101,7 +101,14 @@ export default function App(props: AppProps) {
           <br/>
           {cur_view === Views.Loading && <CircularProgress />}
           {cur_view === Views.App && <MainContainer site_url={cur_url} user={cur_user}/>}
-          {cur_view === Views.Error && <div>Error: Could not log in. Make sure you are logged into your google account in the chrome browser</div>}
+          {cur_view === Views.Error && 
+          <>
+          <div>
+            Error: Could not log in. Make sure you are logged into your google account in the chrome browser
+          </div>
+          <button onClick={doChromeLogin}>Retry Login</button>
+          </>
+          }
         </ThemeProvider>
     </UserProvider>
   );

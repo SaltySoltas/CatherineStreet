@@ -3,17 +3,21 @@ import users_service from './users_service';
 
 function do_google_auth(token: string){
     return new Promise((resolve, reject) => {
+        console.log("Pre oauth fetch");
         request('https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=' + token, function (error, response, body) {
             if(!!error){
+                console.log(error);
                 reject(error);
                 return;
             }
             if(response.statusCode < 200 || response.statusCode > 299){
+                console.log("Failed to get user identity");
                 reject({err: "Failed to get user identity"});
                 return;
             }
 
             body = JSON.parse(body);
+            console.log("response from google oauth", body);
 
             let google_id = body.id;
             users_service.get_user_by_google_id(google_id)

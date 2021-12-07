@@ -14,7 +14,9 @@
     },
     "host_permissions": [
       "https://localhost:8080/api/*",
-      "http://localhost:8080/api/*"
+      "http://localhost:8080/api/*",
+      "https://site-talk.herokuapp.com/*"
+      
     ],
     "oauth2": {
       "client_id": "562754766536-jhjc7sagtpgc972df735o951kkguinnd.apps.googleusercontent.com",
