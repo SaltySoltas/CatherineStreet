@@ -116,7 +116,9 @@ export function CommentBox({comment, updateComment, isParent, enterCommentThread
       ))
     }
 
-    const avatarColor = colors[hashCode(comment.first_name + comment.last_name) % colors.length];
+    let nameHash = hashCode(comment.first_name[0] + comment.first_name + comment.last_name);
+    const avatarColor = colors[nameHash % colors.length];
+    console.log(`nameHash: ${nameHash} length: ${colors.length} avatorColor: ${avatarColor} for ${comment.first_name}, ${comment.last_name}`);
 
     return (     
       <div style={{
