@@ -34,5 +34,6 @@ export interface User{
 export enum SortType {
     Hot = 1,
     MostReactions,
-    New
+    New,
+    Chronological
 }

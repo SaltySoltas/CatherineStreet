@@ -19,6 +19,9 @@ const sort_fns = {
     },
     [SortType.MostReactions]: (a: Comment, b: Comment) => {
         return sort_comp(a.num_reactions, b.num_reactions, -1);
+    },
+    [SortType.Chronological]: (a: Comment, b: Comment) => {
+        return sort_comp(a.created_at, b.created_at, 1);
     }
 };
 
